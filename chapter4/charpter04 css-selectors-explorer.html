@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Selectors Explorer - เรียนรู้ CSS Selectors แบบ Interactive</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0a0f;
+      --bg-panel: #12121a;
+      --bg-code: #1a1a24;
+      --accent-cyan: #00f5d4;
+      --accent-pink: #ff6b9d;
+      --accent-yellow: #ffd93d;
+      --accent-purple: #9b5de5;
+      --accent-orange: #ff8c42;
+      --text-primary: #e8e8e8;
+      --text-secondary: #8888a0;
+      --border-color: #2a2a3a;
+      --highlight-html: rgba(0, 245, 212, 0.15);
+      --highlight-css: rgba(255, 107, 157, 0.15);
+      --glow-cyan: 0 0 20px rgba(0, 245, 212, 0.3);
+      --glow-pink: 0 0 20px rgba(255, 107, 157, 0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 245, 212, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 212, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      z-index: 10;
+      padding: 20px 30px;
+      background: linear-gradient(180deg, var(--bg-dark) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .header-content {
+      max-width: 1800px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h1::before {
+      content: '{ }';
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      -webkit-text-fill-color: var(--accent-cyan);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+
+    /* Main Layout */
+    .main-container {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      height: calc(100vh - 85px);
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Left Panel - Selectors */
+    .selectors-panel {
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-color);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .selectors-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .selectors-panel::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    .selectors-panel::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    .selectors-panel::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-cyan);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .panel-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .selector-count {
+      background: var(--accent-purple);
+      color: white;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    /* Selector Categories */
+    .selector-category {
+      margin-bottom: 25px;
+    }
+
+    .category-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-title::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+    }
+
+    .category-basic .category-title::before { background: var(--accent-cyan); }
+    .category-combinator .category-title::before { background: var(--accent-pink); }
+    .category-attribute .category-title::before { background: var(--accent-yellow); }
+    .category-pseudo .category-title::before { background: var(--accent-purple); }
+    .category-structural .category-title::before { background: var(--accent-orange); }
+
+    .selector-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .selector-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 10px 12px;
+      background: var(--bg-code);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .selector-btn:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 245, 212, 0.05);
+      transform: translateX(3px);
+    }
+
+    .selector-btn.active {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 245, 212, 0.1);
+      box-shadow: var(--glow-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .selector-btn.full-width {
+      grid-column: span 2;
+    }
+
+    /* Right Panel - Code View */
+    .code-panel {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: var(--bg-dark);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .code-tab {
+      font-size: 0.85rem;
+      padding: 8px 20px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .code-tab.active {
+      background: var(--bg-code);
+      border-color: var(--accent-pink);
+      color: var(--accent-pink);
+    }
+
+    .selected-info {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .selected-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .selected-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--accent-cyan);
+      background: var(--bg-code);
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--accent-cyan);
+    }
+
+    /* Code Display */
+    .code-display {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border-color);
+      overflow: hidden;
+      transition: grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .code-display.html-expanded {
+      grid-template-columns: 1fr 80px;
+    }
+
+    .code-display.css-expanded {
+      grid-template-columns: 80px 1fr;
+    }
+
+    .code-section {
+      background: var(--bg-code);
+      overflow: auto;
+      position: relative;
+      min-width: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .code-section.collapsed {
+      overflow: hidden;
+    }
+
+    .code-section.collapsed .code-content {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .code-section-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 12px 20px;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .code-section-header:hover {
+      background: var(--bg-code);
+    }
+
+    .code-section-header:hover .expand-icon {
+      transform: scale(1.2);
+    }
+
+    .expand-icon {
+      margin-left: auto;
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+      opacity: 0.6;
+    }
+
+    .code-section-header:hover .expand-icon {
+      opacity: 1;
+    }
+
+    .code-section.collapsed .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .collapsed-label {
+      display: none;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 20px 0;
+      opacity: 0.7;
+    }
+
+    .code-section.collapsed .collapsed-label {
+      display: block;
+    }
+
+    .code-section.collapsed .code-section-header {
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      padding: 20px 12px;
+      height: 100%;
+      justify-content: flex-start;
+      border-bottom: none;
+      border-left: 1px solid var(--border-color);
+    }
+
+    .code-section.collapsed .code-section-header span:first-child,
+    .code-section.collapsed .code-section-header .header-text {
+      writing-mode: vertical-rl;
+    }
+
+    .code-section.collapsed .code-content {
+      display: none;
+    }
+
+    .html-header {
+      color: var(--accent-cyan);
+    }
+
+    .css-header {
+      color: var(--accent-pink);
+    }
+
+    .header-text {
+      transition: all 0.3s ease;
+    }
+
+    .expand-hint {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      margin-left: 8px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .code-section-header:hover .expand-hint {
+      opacity: 1;
+    }
+
+    .code-section.collapsed .expand-hint {
+      display: none;
+    }
+
+    .code-content {
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      color: var(--text-primary);
+    }
+
+    /* Syntax Highlighting */
+    .tag { color: var(--accent-cyan); }
+    .attr-name { color: var(--accent-yellow); }
+    .attr-value { color: var(--accent-orange); }
+    .text-content { color: var(--text-primary); }
+    .comment { color: var(--text-secondary); font-style: italic; }
+    
+    .css-selector { color: var(--accent-pink); }
+    .css-property { color: var(--accent-cyan); }
+    .css-value { color: var(--accent-orange); }
+    .css-bracket { color: var(--text-secondary); }
+
+    /* Highlighted Lines */
+    .highlight-line {
+      display: inline-block;
+      width: 100%;
+      background: var(--highlight-html);
+      border-left: 3px solid var(--accent-cyan);
+      margin-left: -20px;
+      padding-left: 17px;
+      animation: pulse-highlight 1.5s ease-in-out infinite;
+    }
+
+    .highlight-line-css {
+      background: var(--highlight-css);
+      border-left-color: var(--accent-pink);
+    }
+
+    @keyframes pulse-highlight {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Selector Description */
+    .description-panel {
+      padding: 20px 25px;
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .description-title {
+      font-size: 0.85rem;
+      color: var(--accent-yellow);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .description-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .description-text code {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-code);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent-cyan);
+    }
+
+    .match-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: rgba(155, 93, 229, 0.1);
+      border: 1px solid var(--accent-purple);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--accent-purple);
+    }
+
+    /* Specificity Display */
+    .specificity {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: 15px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .specificity-label {
+      color: var(--text-secondary);
+    }
+
+    .specificity-value {
+      display: flex;
+      gap: 2px;
+    }
+
+    .specificity-digit {
+      background: var(--bg-code);
+      padding: 2px 6px;
+      border-radius: 3px;
+      min-width: 22px;
+      text-align: center;
+    }
+
+    .specificity-digit.id { color: var(--accent-pink); border: 1px solid var(--accent-pink); }
+    .specificity-digit.class { color: var(--accent-yellow); border: 1px solid var(--accent-yellow); }
+    .specificity-digit.element { color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-container {
+        grid-template-columns: 320px 1fr;
+      }
+      
+      .selector-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .selector-btn.full-width {
+        grid-column: span 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .selectors-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        max-height: 250px;
+      }
+
+      .code-display {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      .code-display.html-expanded {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 60px;
+      }
+
+      .code-display.css-expanded {
+        grid-template-columns: 1fr;
+        grid-template-rows: 60px 1fr;
+      }
+
+      .code-section.collapsed .code-section-header {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        padding: 12px 20px;
+        height: auto;
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .expand-icon {
+        transform: rotate(90deg);
+      }
+
+      .code-section.collapsed .expand-icon {
+        transform: rotate(-90deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header>
+    <div class="header-content">
+      <div>
+        <h1>CSS Selectors Explorer</h1>
+        <p class="subtitle">เรียนรู้ CSS Selectors แบบ Interactive - คลิกเลือก Selector เพื่อดู Highlight</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+    <!-- Left Panel: Selectors -->
+    <aside class="selectors-panel">
+      <div class="panel-header">
+        <h2>CSS Selectors</h2>
+        <span class="selector-count">48 Selectors</span>
+      </div>
+
+      <!-- Basic Selectors -->
+      <div class="selector-category category-basic">
+        <div class="category-title">Basic Selectors</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector="*">*</button>
+          <button class="selector-btn" data-selector="h1">h1</button>
+          <button class="selector-btn" data-selector="p">p</button>
+          <button class="selector-btn" data-selector=".intro">.intro</button>
+          <button class="selector-btn" data-selector="#Lastname">#Lastname</button>
+          <button class="selector-btn" data-selector="p.myquote">p.myquote</button>
+          <button class="selector-btn full-width" data-selector=".intro, #Lastname">.intro, #Lastname</button>
+          <button class="selector-btn full-width" data-selector="h1, p">h1, p</button>
+        </div>
+      </div>
+
+      <!-- Combinator Selectors -->
+      <div class="selector-category category-combinator">
+        <div class="category-title">Combinator Selectors</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector="div p">div p</button>
+          <button class="selector-btn" data-selector="div > p">div > p</button>
+          <button class="selector-btn" data-selector="ul + p">ul + p</button>
+          <button class="selector-btn" data-selector="ul ~ table">ul ~ table</button>
+        </div>
+      </div>
+
+      <!-- Attribute Selectors -->
+      <div class="selector-category category-attribute">
+        <div class="category-title">Attribute Selectors</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector="[id]">[id]</button>
+          <button class="selector-btn full-width" data-selector="[id=my-Address]">[id=my-Address]</button>
+          <button class="selector-btn" data-selector="[id$=ess]">[id$=ess]</button>
+          <button class="selector-btn" data-selector="[id|=my]">[id|=my]</button>
+          <button class="selector-btn" data-selector="[id^=L]">[id^=L]</button>
+          <button class="selector-btn full-width" data-selector="[title~=beautiful]">[title~=beautiful]</button>
+          <button class="selector-btn" data-selector="[id*=s]">[id*=s]</button>
+        </div>
+      </div>
+
+      <!-- Pseudo-class Selectors (Form) -->
+      <div class="selector-category category-pseudo">
+        <div class="category-title">Pseudo-class (Form)</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector=":checked">:checked</button>
+          <button class="selector-btn" data-selector=":disabled">:disabled</button>
+          <button class="selector-btn" data-selector=":enabled">:enabled</button>
+          <button class="selector-btn" data-selector=":focus">:focus</button>
+          <button class="selector-btn" data-selector="input:in-range">input:in-range</button>
+          <button class="selector-btn full-width" data-selector="input:out-of-range">input:out-of-range</button>
+          <button class="selector-btn" data-selector="input:invalid">input:invalid</button>
+          <button class="selector-btn" data-selector="input:valid">input:valid</button>
+        </div>
+      </div>
+
+      <!-- Pseudo-class Selectors (State) -->
+      <div class="selector-category category-pseudo">
+        <div class="category-title">Pseudo-class (State)</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector=":empty">:empty</button>
+          <button class="selector-btn" data-selector="h1:hover">h1:hover</button>
+          <button class="selector-btn" data-selector="p:lang(it)">p:lang(it)</button>
+          <button class="selector-btn" data-selector=":root">:root</button>
+        </div>
+      </div>
+
+      <!-- Pseudo-element Selectors -->
+      <div class="selector-category category-pseudo">
+        <div class="category-title">Pseudo-element</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector="p::first-letter">p::first-letter</button>
+          <button class="selector-btn" data-selector="p::first-line">p::first-line</button>
+        </div>
+      </div>
+
+      <!-- Structural Pseudo-class -->
+      <div class="selector-category category-structural">
+        <div class="category-title">Structural Pseudo-class</div>
+        <div class="selector-grid">
+          <button class="selector-btn" data-selector="p:first-child">p:first-child</button>
+          <button class="selector-btn" data-selector="p:last-child">p:last-child</button>
+          <button class="selector-btn" data-selector="p:first-of-type">p:first-of-type</button>
+          <button class="selector-btn" data-selector="p:last-of-type">p:last-of-type</button>
+          <button class="selector-btn full-width" data-selector="tr:nth-child(even)">tr:nth-child(even)</button>
+          <button class="selector-btn full-width" data-selector="tr:nth-child(odd)">tr:nth-child(odd)</button>
+          <button class="selector-btn" data-selector="li:nth-child(1)">li:nth-child(1)</button>
+          <button class="selector-btn full-width" data-selector="li:nth-last-child(1)">li:nth-last-child(1)</button>
+          <button class="selector-btn" data-selector="li:nth-of-type(2)">li:nth-of-type(2)</button>
+          <button class="selector-btn full-width" data-selector="li:nth-last-of-type(2)">li:nth-last-of-type(2)</button>
+          <button class="selector-btn" data-selector="b:only-child">b:only-child</button>
+          <button class="selector-btn" data-selector="h3:only-of-type">h3:only-of-type</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Panel: Code Display -->
+    <section class="code-panel">
+      <div class="code-header">
+        <button class="code-tab active">📄 Live Preview</button>
+        <div class="selected-info">
+          <span class="selected-label">Selected:</span>
+          <span class="selected-value" id="selectedSelector">คลิกเลือก Selector</span>
+          <div class="specificity" id="specificityDisplay" style="display: none;">
+            <span class="specificity-label">Specificity:</span>
+            <div class="specificity-value">
+              <span class="specificity-digit id" id="specId">0</span>
+              <span class="specificity-digit class" id="specClass">0</span>
+              <span class="specificity-digit element" id="specElement">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-display" id="codeDisplay">
+        <!-- HTML Code -->
+        <div class="code-section" id="htmlSection">
+          <div class="code-section-header html-header" onclick="toggleSection('html')">
+            <span>📝</span>
+            <span class="header-text">HTML</span>
+            <span class="expand-hint">คลิกเพื่อย่อ/ขยาย</span>
+            <span class="expand-icon">◀</span>
+          </div>
+          <div class="code-content" id="htmlCode"></div>
+        </div>
+
+        <!-- CSS Code -->
+        <div class="code-section" id="cssSection">
+          <div class="code-section-header css-header" onclick="toggleSection('css')">
+            <span>🎨</span>
+            <span class="header-text">CSS</span>
+            <span class="expand-hint">คลิกเพื่อย่อ/ขยาย</span>
+            <span class="expand-icon">▶</span>
+          </div>
+          <div class="code-content" id="cssCode"></div>
+        </div>
+      </div>
+
+      <!-- Description Panel -->
+      <div class="description-panel">
+        <div class="description-title">
+          <span>💡</span> คำอธิบาย
+        </div>
+        <div class="description-text" id="selectorDescription">
+          คลิกเลือก CSS Selector ด้านซ้าย เพื่อดูว่า Selector นั้นจะเลือก Element ใดในโค้ด HTML
+        </div>
+        <div class="match-count" id="matchCount" style="display: none;">
+          <span>🎯</span>
+          <span id="matchText">พบ 0 Element ที่ตรงกัน</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Sample HTML structure for demonstration
+    const sampleHTML = `<!DOCTYPE html>
+<html lang="th">
+<head>
+  <title>CSS Selectors Demo</title>
+</head>
+<body>
+  <div class="container">
+    <h1 id="main-title">Welcome to CSS</h1>
+    
+    <p class="intro">This is intro paragraph.</p>
+    
+    <p id="Lastname">Smith</p>
+    
+    <p class="myquote" title="A beautiful day">
+      Life is beautiful
+    </p>
+    
+    <span class="myquote">This span has myquote class (NOT selected by p.myquote)</span>
+    
+    <div class="content">
+      <p>Paragraph inside div (direct child)</p>
+      <span>
+        <p>Nested paragraph (grandchild of div)</p>
+      </span>
+    </div>
+    
+    <ul>
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+    
+    <p>Paragraph after ul (adjacent sibling)</p>
+    
+    <table>
+      <tr><td>Row 1 (odd)</td></tr>
+      <tr><td>Row 2 (even)</td></tr>
+      <tr><td>Row 3 (odd)</td></tr>
+      <tr><td>Row 4 (even)</td></tr>
+    </table>
+    
+    <div id="my-Address">Bangkok, Thailand</div>
+    
+    <div id="business">Business Info</div>
+    
+    <p lang="it">Ciao mondo!</p>
+    
+    <div class="empty-box"></div>
+    
+    <form>
+      <input type="checkbox" checked /> Remember me
+      <input type="text" value="Enabled input" />
+      <input type="text" disabled value="Disabled" />
+      <input type="number" min="1" max="10" value="5" />
+      <input type="number" min="1" max="10" value="15" />
+      <input type="email" value="invalid-email" />
+      <input type="email" value="test@example.com" />
+    </form>
+    
+    <section>
+      <h3>Only h3 here</h3>
+      <p><b>Only bold child</b></p>
+      <p>Second p in section</p>
+    </section>
+    
+    <article>
+      <p class="intro">Intro in article (also has .intro)</p>
+      <p>Last p in article</p>
+    </article>
+  </div>
+</body>
+</html>`;
+
+    // Line numbers (1-indexed) for each line in sampleHTML:
+    // 1: <!DOCTYPE html>
+    // 2: <html lang="th">
+    // 3: <head>
+    // 4:   <title>CSS Selectors Demo</title>
+    // 5: </head>
+    // 6: <body>
+    // 7:   <div class="container">
+    // 8:     <h1 id="main-title">Welcome to CSS</h1>
+    // 9:     (empty)
+    // 10:    <p class="intro">This is intro paragraph.</p>
+    // 11:    (empty)
+    // 12:    <p id="Lastname">Smith</p>
+    // 13:    (empty)
+    // 14:    <p class="myquote" title="A beautiful day">
+    // 15:      Life is beautiful
+    // 16:    </p>
+    // 17:    (empty)
+    // 18:    <span class="myquote">This span has myquote class...</span>
+    // 19:    (empty)
+    // 20:    <div class="content">
+    // 21:      <p>Paragraph inside div (direct child)</p>
+    // 22:      <span>
+    // 23:        <p>Nested paragraph (grandchild of div)</p>
+    // 24:      </span>
+    // 25:    </div>
+    // 26:    (empty)
+    // 27:    <ul>
+    // 28:      <li>Item 1</li>
+    // 29:      <li>Item 2</li>
+    // 30:      <li>Item 3</li>
+    // 31:    </ul>
+    // 32:    (empty)
+    // 33:    <p>Paragraph after ul (adjacent sibling)</p>
+    // 34:    (empty)
+    // 35:    <table>
+    // 36:      <tr><td>Row 1 (odd)</td></tr>
+    // 37:      <tr><td>Row 2 (even)</td></tr>
+    // 38:      <tr><td>Row 3 (odd)</td></tr>
+    // 39:      <tr><td>Row 4 (even)</td></tr>
+    // 40:    </table>
+    // 41:    (empty)
+    // 42:    <div id="my-Address">Bangkok, Thailand</div>
+    // 43:    (empty)
+    // 44:    <div id="business">Business Info</div>
+    // 45:    (empty)
+    // 46:    <p lang="it">Ciao mondo!</p>
+    // 47:    (empty)
+    // 48:    <div class="empty-box"></div>
+    // 49:    (empty)
+    // 50:    <form>
+    // 51:      <input type="checkbox" checked /> Remember me
+    // 52:      <input type="text" value="Enabled input" />
+    // 53:      <input type="text" disabled value="Disabled" />
+    // 54:      <input type="number" min="1" max="10" value="5" />
+    // 55:      <input type="number" min="1" max="10" value="15" />
+    // 56:      <input type="email" value="invalid-email" />
+    // 57:      <input type="email" value="test@example.com" />
+    // 58:    </form>
+    // 59:    (empty)
+    // 60:    <section>
+    // 61:      <h3>Only h3 here</h3>
+    // 62:      <p><b>Only bold child</b></p>
+    // 63:      <p>Second p in section</p>
+    // 64:    </section>
+    // 65:    (empty)
+    // 66:    <article>
+    // 67:      <p class="intro">Intro in article (also has .intro)</p>
+    // 68:      <p>Last p in article</p>
+    // 69:    </article>
+    // 70:  </div>
+    // 71: </body>
+    // 72: </html>
+
+    // Toggle section expand/collapse
+    function toggleSection(section) {
+      const codeDisplay = document.getElementById('codeDisplay');
+      const htmlSection = document.getElementById('htmlSection');
+      const cssSection = document.getElementById('cssSection');
+
+      if (section === 'html') {
+        if (codeDisplay.classList.contains('css-expanded')) {
+          // Reset to normal
+          codeDisplay.classList.remove('css-expanded');
+          cssSection.classList.remove('collapsed');
+        } else if (!codeDisplay.classList.contains('html-expanded')) {
+          // Expand HTML, collapse CSS
+          codeDisplay.classList.add('html-expanded');
+          cssSection.classList.add('collapsed');
+        } else {
+          // Reset to normal
+          codeDisplay.classList.remove('html-expanded');
+          cssSection.classList.remove('collapsed');
+        }
+      } else if (section === 'css') {
+        if (codeDisplay.classList.contains('html-expanded')) {
+          // Reset to normal
+          codeDisplay.classList.remove('html-expanded');
+          htmlSection.classList.remove('collapsed');
+        } else if (!codeDisplay.classList.contains('css-expanded')) {
+          // Expand CSS, collapse HTML
+          codeDisplay.classList.add('css-expanded');
+          htmlSection.classList.add('collapsed');
+        } else {
+          // Reset to normal
+          codeDisplay.classList.remove('css-expanded');
+          htmlSection.classList.remove('collapsed');
+        }
+      }
+    }
+
+    // Selector data with descriptions and line mapping
+    const selectorData = {
+      '*': {
+        description: 'Universal Selector เลือก <b>ทุก Element</b> ในเอกสาร รวมถึง html, head, body และอื่นๆ',
+        lines: 'all',
+        specificity: [0, 0, 0]
+      },
+      'h1': {
+        description: 'Element Selector เลือก <b>ทุก &lt;h1&gt;</b> ในเอกสาร',
+        htmlLines: [8],
+        specificity: [0, 0, 1]
+      },
+      'p': {
+        description: 'Element Selector เลือก <b>ทุก &lt;p&gt;</b> ในเอกสาร (รวม 11 ตัว)',
+        htmlLines: [10, 12, 14, 21, 23, 33, 46, 62, 63, 67, 68],
+        specificity: [0, 0, 1]
+      },
+      '.intro': {
+        description: 'Class Selector เลือก <b>ทุก Element</b> ที่มี <code>class="intro"</code> ไม่ว่าจะเป็น tag อะไรก็ตาม<br>✅ เลือกทั้ง &lt;p class="intro"&gt; (บรรทัด 10) และ &lt;p class="intro"&gt; ใน article (บรรทัด 67)',
+        htmlLines: [10, 67],
+        specificity: [0, 1, 0]
+      },
+      '#Lastname': {
+        description: 'ID Selector เลือก Element ที่มี <code>id="Lastname"</code> (ควรมีแค่ 1 ในเอกสาร)',
+        htmlLines: [12],
+        specificity: [1, 0, 0]
+      },
+      '.intro, #Lastname': {
+        description: 'Grouping Selector เลือกทั้ง <code>.intro</code> และ <code>#Lastname</code>',
+        htmlLines: [10, 12, 67],
+        specificity: [1, 1, 0]
+      },
+      'h1, p': {
+        description: 'Grouping Selector เลือกทั้ง <code>&lt;h1&gt;</code> และ <code>&lt;p&gt;</code> ทุกตัว',
+        htmlLines: [8, 10, 12, 14, 21, 23, 33, 46, 62, 63, 67, 68],
+        specificity: [0, 0, 1]
+      },
+      'div p': {
+        description: 'Descendant Selector เลือก <code>&lt;p&gt;</code> ที่อยู่ภายใน <code>&lt;div&gt;</code> (ทุกระดับลึก)',
+        htmlLines: [10, 12, 14, 21, 23, 33, 46, 62, 63, 67, 68],
+        specificity: [0, 0, 2]
+      },
+      'div > p': {
+        description: 'Child Selector เลือก <code>&lt;p&gt;</code> ที่เป็น <b>ลูกโดยตรง</b> ของ <code>&lt;div&gt;</code> เท่านั้น<br>❌ ไม่เลือก p บรรทัด 23 เพราะอยู่ใน &lt;span&gt; (เป็น grandchild)',
+        htmlLines: [10, 12, 14, 21, 33, 46],
+        specificity: [0, 0, 2]
+      },
+      'ul + p': {
+        description: 'Adjacent Sibling Selector เลือก <code>&lt;p&gt;</code> ที่อยู่ <b>ติดกันทันที</b> หลัง <code>&lt;ul&gt;</code>',
+        htmlLines: [33],
+        specificity: [0, 0, 2]
+      },
+      'ul ~ table': {
+        description: 'General Sibling Selector เลือก <code>&lt;table&gt;</code> ที่เป็น <b>พี่น้อง</b> และอยู่หลัง <code>&lt;ul&gt;</code>',
+        htmlLines: [35],
+        specificity: [0, 0, 2]
+      },
+      'p.myquote': {
+        description: 'Combined Selector เลือก <b>เฉพาะ &lt;p&gt;</b> ที่มี <code>class="myquote"</code> เท่านั้น<br>❌ ไม่เลือก <code>&lt;span class="myquote"&gt;</code> (บรรทัด 18) เพราะไม่ใช่ &lt;p&gt;',
+        htmlLines: [14],
+        specificity: [0, 1, 1]
+      },
+      '[id]': {
+        description: 'Attribute Selector เลือก Element ที่ <b>มี attribute</b> <code>id</code> (ไม่ว่าค่าจะเป็นอะไร)',
+        htmlLines: [8, 12, 42, 44],
+        specificity: [0, 1, 0]
+      },
+      '[id=my-Address]': {
+        description: 'Attribute Equals Selector เลือก Element ที่มี <code>id="my-Address"</code> ตรงเป๊ะ',
+        htmlLines: [42],
+        specificity: [0, 1, 0]
+      },
+      '[id$=ess]': {
+        description: 'Attribute Ends With เลือก Element ที่ <code>id</code> <b>ลงท้าย</b> ด้วย "ess" (my-Addr<b>ess</b>, busin<b>ess</b>)',
+        htmlLines: [42, 44],
+        specificity: [0, 1, 0]
+      },
+      '[id|=my]': {
+        description: 'Attribute Starts With (Hyphen) เลือก Element ที่ <code>id</code> เท่ากับ "my" หรือ <b>ขึ้นต้น</b> ด้วย "my-"',
+        htmlLines: [42],
+        specificity: [0, 1, 0]
+      },
+      '[id^=L]': {
+        description: 'Attribute Starts With เลือก Element ที่ <code>id</code> <b>ขึ้นต้น</b> ด้วย "L"',
+        htmlLines: [12],
+        specificity: [0, 1, 0]
+      },
+      '[title~=beautiful]': {
+        description: 'Attribute Contains Word เลือก Element ที่ <code>title</code> <b>มีคำ</b> "beautiful" (แยกด้วย space)',
+        htmlLines: [14],
+        specificity: [0, 1, 0]
+      },
+      '[id*=s]': {
+        description: 'Attribute Contains เลือก Element ที่ <code>id</code> <b>มีตัวอักษร</b> "s" อยู่ที่ไหนก็ได้',
+        htmlLines: [42, 44],
+        specificity: [0, 1, 0]
+      },
+      ':checked': {
+        description: 'Pseudo-class เลือก <code>&lt;input&gt;</code> ที่ถูก <b>เลือก/ติ๊ก</b> อยู่ (checkbox, radio)',
+        htmlLines: [51],
+        specificity: [0, 1, 0]
+      },
+      ':disabled': {
+        description: 'Pseudo-class เลือก <code>&lt;input&gt;</code> ที่ถูก <b>disabled</b>',
+        htmlLines: [53],
+        specificity: [0, 1, 0]
+      },
+      ':enabled': {
+        description: 'Pseudo-class เลือก <code>&lt;input&gt;</code> ที่ <b>enabled</b> (ใช้งานได้ - ไม่มี disabled)',
+        htmlLines: [51, 52, 54, 55, 56, 57],
+        specificity: [0, 1, 0]
+      },
+      ':empty': {
+        description: 'Pseudo-class เลือก Element ที่ <b>ไม่มี children</b> ใดๆ (รวมถึง text)',
+        htmlLines: [48],
+        specificity: [0, 1, 0]
+      },
+      ':focus': {
+        description: 'Pseudo-class เลือก Element ที่กำลัง <b>ถูก focus</b> อยู่ (ต้องคลิกที่ input เพื่อดู)',
+        htmlLines: [],
+        specificity: [0, 1, 0]
+      },
+      'p:first-child': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;p&gt;</code> ที่เป็น <b>ลูกคนแรก</b> ของ parent (p ต้องเป็นลูกตัวแรกสุด)',
+        htmlLines: [21, 23, 67],
+        specificity: [0, 1, 1]
+      },
+      'p::first-letter': {
+        description: 'Pseudo-element เลือก <b>ตัวอักษรแรก</b> ของทุก <code>&lt;p&gt;</code>',
+        htmlLines: [10, 12, 14, 21, 23, 33, 46, 62, 63, 67, 68],
+        specificity: [0, 0, 2]
+      },
+      'p::first-line': {
+        description: 'Pseudo-element เลือก <b>บรรทัดแรก</b> ของทุก <code>&lt;p&gt;</code>',
+        htmlLines: [10, 12, 14, 21, 23, 33, 46, 62, 63, 67, 68],
+        specificity: [0, 0, 2]
+      },
+      'p:first-of-type': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;p&gt;</code> <b>ตัวแรกของประเภท p</b> ในแต่ละกลุ่มพี่น้อง',
+        htmlLines: [10, 21, 23, 62, 67],
+        specificity: [0, 1, 1]
+      },
+      'h1:hover': {
+        description: 'Pseudo-class เลือก <code>&lt;h1&gt;</code> เมื่อ <b>เอาเมาส์ชี้</b> (hover) - ต้อง hover เพื่อดู',
+        htmlLines: [8],
+        specificity: [0, 1, 1]
+      },
+      'input:in-range': {
+        description: 'Pseudo-class เลือก <code>&lt;input type="number"&gt;</code> ที่ค่า <b>อยู่ในช่วง</b> min-max (value=5 อยู่ในช่วง 1-10)',
+        htmlLines: [54],
+        specificity: [0, 1, 1]
+      },
+      'input:out-of-range': {
+        description: 'Pseudo-class เลือก <code>&lt;input type="number"&gt;</code> ที่ค่า <b>นอกช่วง</b> min-max (value=15 เกิน max=10)',
+        htmlLines: [55],
+        specificity: [0, 1, 1]
+      },
+      'input:invalid': {
+        description: 'Pseudo-class เลือก <code>&lt;input&gt;</code> ที่ค่า <b>ไม่ valid</b> (email ผิด format, number นอก range)',
+        htmlLines: [55, 56],
+        specificity: [0, 1, 1]
+      },
+      'input:valid': {
+        description: 'Pseudo-class เลือก <code>&lt;input&gt;</code> ที่ค่า <b>valid</b> ตาม type ที่กำหนด',
+        htmlLines: [51, 52, 53, 54, 57],
+        specificity: [0, 1, 1]
+      },
+      'p:lang(it)': {
+        description: 'Pseudo-class เลือก <code>&lt;p&gt;</code> ที่มี <code>lang="it"</code> (ภาษาอิตาลี)',
+        htmlLines: [46],
+        specificity: [0, 1, 1]
+      },
+      'p:last-child': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;p&gt;</code> ที่เป็น <b>ลูกคนสุดท้าย</b> ของ parent',
+        htmlLines: [23, 63, 68],
+        specificity: [0, 1, 1]
+      },
+      'p:last-of-type': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;p&gt;</code> <b>ตัวสุดท้ายของประเภท p</b> ในแต่ละกลุ่มพี่น้อง',
+        htmlLines: [21, 23, 46, 63, 68],
+        specificity: [0, 1, 1]
+      },
+      'tr:nth-child(even)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;tr&gt;</code> ที่เป็นลูก <b>ลำดับคู่</b> (2, 4, 6...)',
+        htmlLines: [37, 39],
+        specificity: [0, 1, 1]
+      },
+      'tr:nth-child(odd)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;tr&gt;</code> ที่เป็นลูก <b>ลำดับคี่</b> (1, 3, 5...)',
+        htmlLines: [36, 38],
+        specificity: [0, 1, 1]
+      },
+      'li:nth-child(1)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;li&gt;</code> ที่เป็นลูก <b>ลำดับที่ 1</b> (Item 1)',
+        htmlLines: [28],
+        specificity: [0, 1, 1]
+      },
+      'li:nth-last-child(1)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;li&gt;</code> ที่เป็นลูก <b>ลำดับสุดท้าย</b> นับจากท้าย (Item 3)',
+        htmlLines: [30],
+        specificity: [0, 1, 1]
+      },
+      'li:nth-of-type(2)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;li&gt;</code> <b>ตัวที่ 2</b> ในกลุ่มพี่น้อง (Item 2)',
+        htmlLines: [29],
+        specificity: [0, 1, 1]
+      },
+      'li:nth-last-of-type(2)': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;li&gt;</code> <b>ตัวที่ 2 จากท้าย</b> ในกลุ่มพี่น้อง (Item 2)',
+        htmlLines: [29],
+        specificity: [0, 1, 1]
+      },
+      'b:only-child': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;b&gt;</code> ที่เป็น <b>ลูกเพียงคนเดียว</b> ของ parent',
+        htmlLines: [62],
+        specificity: [0, 1, 1]
+      },
+      'h3:only-of-type': {
+        description: 'Structural Pseudo-class เลือก <code>&lt;h3&gt;</code> ที่เป็น <b>ประเภทเดียว</b> ในกลุ่มพี่น้อง (มี h3 แค่ตัวเดียว)',
+        htmlLines: [61],
+        specificity: [0, 1, 1]
+      },
+      ':root': {
+        description: 'Pseudo-class เลือก <b>root element</b> ของเอกสาร (คือ <code>&lt;html&gt;</code>)',
+        htmlLines: [2],
+        specificity: [0, 1, 0]
+      }
+    };
+
+    // Initialize
+    const htmlCodeEl = document.getElementById('htmlCode');
+    const cssCodeEl = document.getElementById('cssCode');
+    const selectedSelectorEl = document.getElementById('selectedSelector');
+    const descriptionEl = document.getElementById('selectorDescription');
+    const matchCountEl = document.getElementById('matchCount');
+    const matchTextEl = document.getElementById('matchText');
+    const specificityDisplay = document.getElementById('specificityDisplay');
+    const specId = document.getElementById('specId');
+    const specClass = document.getElementById('specClass');
+    const specElement = document.getElementById('specElement');
+    const selectorBtns = document.querySelectorAll('.selector-btn');
+
+    // Display HTML with syntax highlighting
+    function displayHTML(highlightLines = []) {
+      const lines = sampleHTML.split('\n');
+      let html = '';
+      
+      lines.forEach((line, index) => {
+        const lineNum = index + 1;
+        const isHighlighted = highlightLines.includes(lineNum) || highlightLines === 'all';
+        
+        // Syntax highlighting
+        let processedLine = highlightHTMLSyntax(line);
+        
+        if (isHighlighted) {
+          html += `<span class="highlight-line">${processedLine}</span>\n`;
+        } else {
+          html += processedLine + '\n';
+        }
+      });
+      
+      htmlCodeEl.innerHTML = html;
+    }
+
+    // HTML Syntax Highlighter
+    function highlightHTMLSyntax(line) {
+      let result = '';
+      let i = 0;
+      
+      while (i < line.length) {
+        // Check for HTML tag
+        if (line[i] === '<') {
+          // Find the end of the tag
+          let tagEnd = line.indexOf('>', i);
+          if (tagEnd === -1) tagEnd = line.length;
+          
+          let tagContent = line.substring(i + 1, tagEnd);
+          
+          // Check if it's a comment
+          if (tagContent.startsWith('!--')) {
+            let commentEnd = line.indexOf('-->', i);
+            if (commentEnd !== -1) {
+              result += '<span class="comment">&lt;' + escapeHtml(line.substring(i + 1, commentEnd + 3)) + '</span>';
+              i = commentEnd + 3;
+              continue;
+            }
+          }
+          
+          // Check if it's DOCTYPE
+          if (tagContent.startsWith('!DOCTYPE') || tagContent.startsWith('!doctype')) {
+            result += '&lt;<span class="tag">' + escapeHtml(tagContent) + '</span>&gt;';
+            i = tagEnd + 1;
+            continue;
+          }
+          
+          // Regular tag - parse it
+          result += '&lt;';
+          
+          // Check for closing tag
+          let isClosing = tagContent.startsWith('/');
+          if (isClosing) {
+            result += '/';
+            tagContent = tagContent.substring(1);
+          }
+          
+          // Extract tag name
+          let tagNameMatch = tagContent.match(/^([\w-]+)/);
+          if (tagNameMatch) {
+            let tagName = tagNameMatch[1];
+            result += '<span class="tag">' + tagName + '</span>';
+            
+            // Process attributes
+            let attrPart = tagContent.substring(tagName.length);
+            
+            // Match attributes: name="value" or name='value' or just name
+            attrPart = attrPart.replace(/([\w-]+)=(["'])([^"']*)\2/g, 
+              '<span class="attr-name">$1</span>=<span class="attr-value">$2$3$2</span>');
+            
+            // Match boolean attributes (like checked, disabled)
+            attrPart = attrPart.replace(/\s([\w-]+)(?=\s|$|\/|>)/g, 
+              ' <span class="attr-name">$1</span>');
+            
+            result += attrPart;
+          } else {
+            result += escapeHtml(tagContent);
+          }
+          
+          result += '&gt;';
+          i = tagEnd + 1;
+        } else {
+          // Regular text - escape and add
+          let nextTag = line.indexOf('<', i);
+          if (nextTag === -1) nextTag = line.length;
+          result += escapeHtml(line.substring(i, nextTag));
+          i = nextTag;
+        }
+      }
+      
+      return result;
+    }
+
+    // Display CSS with the selected selector
+    function displayCSS(selector) {
+      if (!selector) {
+        cssCodeEl.innerHTML = '<span class="comment">/* เลือก Selector ด้านซ้าย\n   เพื่อดู CSS Example */</span>';
+        return;
+      }
+
+      const cssExample = `<span class="comment">/* CSS Selector: ${escapeHtml(selector)} */</span>
+
+<span class="highlight-line-css"><span class="css-selector">${escapeHtml(selector)}</span> <span class="css-bracket">{</span>
+  <span class="css-property">background-color</span>: <span class="css-value">#00f5d4</span>;
+  <span class="css-property">color</span>: <span class="css-value">#0a0a0f</span>;
+  <span class="css-property">padding</span>: <span class="css-value">10px</span>;
+  <span class="css-property">border</span>: <span class="css-value">2px solid #ff6b9d</span>;
+<span class="css-bracket">}</span></span>
+
+<span class="comment">/* 
+  เมื่อใช้ Selector นี้ 
+  Element ที่ตรงกันจะได้รับ Style ด้านบน
+*/</span>`;
+
+      cssCodeEl.innerHTML = cssExample;
+    }
+
+    // Escape HTML entities
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Handle selector click
+    function handleSelectorClick(btn) {
+      // Remove active class from all buttons
+      selectorBtns.forEach(b => b.classList.remove('active'));
+      
+      // Add active class to clicked button
+      btn.classList.add('active');
+      
+      const selector = btn.dataset.selector;
+      const data = selectorData[selector] || {};
+      
+      // Update selected display
+      selectedSelectorEl.textContent = selector;
+      
+      // Update description
+      descriptionEl.innerHTML = data.description || 'ไม่พบคำอธิบาย';
+      
+      // Update specificity
+      if (data.specificity) {
+        specificityDisplay.style.display = 'flex';
+        specId.textContent = data.specificity[0];
+        specClass.textContent = data.specificity[1];
+        specElement.textContent = data.specificity[2];
+      } else {
+        specificityDisplay.style.display = 'none';
+      }
+      
+      // Highlight HTML lines
+      const lines = data.htmlLines || [];
+      displayHTML(data.lines || lines);
+      
+      // Update match count
+      if (Array.isArray(lines) && lines.length > 0) {
+        matchCountEl.style.display = 'inline-flex';
+        matchTextEl.textContent = `พบ ${lines.length} Element ที่ตรงกัน`;
+      } else if (data.lines === 'all') {
+        matchCountEl.style.display = 'inline-flex';
+        matchTextEl.textContent = 'เลือกทุก Element ในเอกสาร';
+      } else {
+        matchCountEl.style.display = 'inline-flex';
+        matchTextEl.textContent = 'ต้องมี interaction (เช่น hover, focus)';
+      }
+      
+      // Display CSS
+      displayCSS(selector);
+    }
+
+    // Add event listeners
+    selectorBtns.forEach(btn => {
+      btn.addEventListener('click', () => handleSelectorClick(btn));
+    });
+
+    // Initial display
+    displayHTML();
+    displayCSS(null);
+  </script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive CSS Selectors Explorer</title>
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --bg-sidebar: #252526;
+            --text-main: #d4d4d4;
+            --accent: #007acc;
+            --highlight-html: #aaffc3; /* เขียวมิ้นท์ */
+            --highlight-css: #ffb6c1;  /* ชมพู */
+            --border: #3c3c3c;
+            --code-tag: #569cd6;
+            --code-attr: #9cdcfe;
+            --code-string: #ce9178;
+            --code-comment: #6a9955;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* --- Left Panel: Selector Panel --- */
+        .sidebar {
+            width: 350px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 15px;
+            background-color: #333;
+            font-weight: bold;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .category {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-title {
+            padding: 10px 15px;
+            background-color: #2d2d2d;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #aaa;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .category-title:hover { color: #fff; }
+
+        .selector-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 20px;
+            text-align: left;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .selector-btn:hover {
+            background-color: #37373d;
+        }
+
+        .selector-btn.active {
+            background-color: #094771;
+            color: white;
+            border-left: 3px solid var(--highlight-html);
+        }
+
+        /* --- Right Panel: Code Display --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .info-panel {
+            background-color: #2d2d2d;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .specificity-badge {
+            background-color: #444;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-family: monospace;
+        }
+
+        .css-preview {
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            border-left: 3px solid var(--highlight-css);
+            margin-top: 10px;
+        }
+
+        .code-container {
+            background-color: #1e1e1e;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            white-space: pre-wrap;
+            position: relative;
+            flex: 1;
+            overflow: auto;
+        }
+
+        /* --- Syntax Highlighting & Mock DOM Styling --- */
+        /* เราใช้ HTML จริงๆ ในการแสดงผลเพื่อให้ Selectors ทำงานได้ แต่จัด Style ให้เหมือน Code Editor */
+        
+        .mock-dom {
+            counter-reset: line;
+            color: #d4d4d4;
+        }
+
+        .mock-dom * {
+            display: block; /* บังคับให้ทุก element ขึ้นบรรทัดใหม่เหมือน code */
+            padding-left: 20px; /* Indentation */
+            border: 1px solid transparent; /* เตรียมไว้สำหรับ highlight */
+            border-radius: 3px;
+        }
+
+        /* การแสดงผล Tag แบบ Text */
+        .mock-dom *:before {
+            content: "<" attr(data-tag) attr(data-attr) ">";
+            color: var(--code-tag);
+            display: inline;
+        }
+        
+        /* ปิด Tag */
+        .mock-dom *:after {
+            content: "</" attr(data-tag) ">";
+            color: var(--code-tag);
+            display: inline;
+        }
+
+        /* Self-closing tags */
+        .mock-dom input:after { content: ""; }
+        .mock-dom input:before { content: "<input" attr(data-attr) ">"; }
+
+        /* ข้อความภายใน */
+        .mock-dom span.text-content {
+            display: inline;
+            padding: 0;
+            color: var(--text-main);
+            border: none;
+        }
+        .mock-dom span.text-content:before, 
+        .mock-dom span.text-content:after { content: none; }
+
+        /* --- Highlighting Logic --- */
+        
+        /* Highlight สีเขียวมิ้นท์ เมื่อ Match HTML */
+        .mock-dom .matched {
+            background-color: rgba(170, 255, 195, 0.2); /* เขียวมิ้นท์จางๆ เป็นพื้นหลัง */
+            border: 1px dashed var(--highlight-html);
+            box-shadow: -2px 0 0 var(--highlight-html); /* ขีดข้างหน้า */
+        }
+        
+        /* Highlight เฉพาะข้อความข้างใน (ถ้ามี) ให้ชัดขึ้น */
+        .mock-dom .matched > span.text-content {
+            background-color: var(--highlight-html);
+            color: #000;
+            border-radius: 2px;
+        }
+
+        /* สำหรับ Pseudo-elements */
+        .mock-dom .matched.pseudo-element-match {
+            border-color: #ffd700;
+        }
+
+        /* Utility classes for data setup */
+        .hidden { display: none !important; }
+
+        /* สี Syntax เพิ่มเติม */
+        .attr-key { color: var(--code-attr); }
+        .attr-val { color: var(--code-string); }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">CSS Selectors Explorer</div>
+        <div id="selector-list">
+            </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="info-panel">
+            <div class="info-header">
+                <h2 id="current-selector" style="margin:0; color: var(--highlight-css);">Select a Selector</h2>
+                <span id="specificity-display" class="specificity-badge">Specificity: -</span>
+            </div>
+            <p id="description-text" style="color: #ccc; margin-bottom: 10px;">คลิกที่เมนูด้านซ้ายเพื่อดูการทำงาน</p>
+            <div id="match-count" style="font-size: 0.9em; color: #888;"></div>
+            
+            <div class="css-preview">
+                <span style="color:var(--highlight-css)" id="css-selector-preview">selector</span> {<br>
+                &nbsp;&nbsp;<span style="color:#dcdcaa">background-color</span>: <span style="color:#ce9178">var(--highlight-html)</span>;<br>
+                &nbsp;&nbsp;<span style="color:#6a9955">/* ... other styles */</span><br>
+                }
+            </div>
+        </div>
+
+        <div class="code-container">
+            <div class="mock-dom" id="sandbox">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. ข้อมูล Selectors และคำอธิบาย ---
+        const selectorsData = [
+            { 
+                category: "Basic Selectors",
+                items: [
+                    { sel: "*", desc: "เลือกทุก Element ในหน้านี้ (Universal Selector)", spec: "0-0-0" },
+                    { sel: "h1", desc: "เลือก Element <h1> ทั้งหมด", spec: "0-0-1" },
+                    { sel: "p", desc: "เลือก Element <p> (Paragraph) ทั้งหมด", spec: "0-0-1" },
+                    { sel: ".intro", desc: "เลือก Element ที่มี class='intro'", spec: "0-1-0" },
+                    { sel: "#Lastname", desc: "เลือก Element ที่มี id='Lastname'", spec: "1-0-0" },
+                ]
+            },
+            {
+                category: "Combinator Selectors",
+                items: [
+                    { sel: ".intro, #Lastname", desc: "Grouping: เลือกทั้ง .intro และ #Lastname", spec: "Mix" },
+                    { sel: "h1, p", desc: "Grouping: เลือกทั้ง h1 และ p", spec: "0-0-1" },
+                    { sel: "div p", desc: "Descendant: เลือก <p> ทุกตัวที่อยู่ภายใต้ <div> (ไม่ว่าจะซ้อนลึกแค่ไหน)", spec: "0-0-2" },
+                    { sel: "div > p", desc: "Child: เลือก <p> ที่เป็นลูกโดยตรง (Direct Child) ของ <div>", spec: "0-0-2" },
+                    { sel: "ul + p", desc: "Adjacent Sibling: เลือก <p> ที่อยู่ติดต่อจาก <ul> ทันที", spec: "0-0-2" },
+                    { sel: "ul ~ table", desc: "General Sibling: เลือก <table> ที่ตามหลัง <ul> ในระดับเดียวกัน", spec: "0-0-2" }
+                ]
+            },
+            {
+                category: "Attribute Selectors",
+                items: [
+                    { sel: "[id]", desc: "เลือก Element ที่มี attribute 'id' อะไรก็ได้", spec: "0-1-0" },
+                    { sel: "[id=my-Address]", desc: "เลือกที่มี id เท่ากับ 'my-Address' เป๊ะๆ", spec: "0-1-0" },
+                    { sel: "[id$=ess]", desc: "เลือกที่มี id ลงท้ายด้วย 'ess'", spec: "0-1-0" },
+                    { sel: "[id|=my]", desc: "เลือกที่มี id ขึ้นต้นด้วย 'my' และตามด้วยขีดทันที (หรือเป็นคำนั้นคำเดียว)", spec: "0-1-0" },
+                    { sel: "[id^=L]", desc: "เลือกที่มี id ขึ้นต้นด้วยตัว 'L'", spec: "0-1-0" },
+                    { sel: "[title~=beautiful]", desc: "เลือกที่มี title ประกอบด้วยคำว่า 'beautiful' (คั่นด้วยวรรค)", spec: "0-1-0" },
+                    { sel: "[id*=s]", desc: "เลือกที่มี id มีตัวอักษร 's' ผสมอยู่ตรงไหนก็ได้", spec: "0-1-0" }
+                ]
+            },
+            {
+                category: "Pseudo-class (Form)",
+                items: [
+                    { sel: ":checked", desc: "เลือก input ที่ถูกติ๊กเลือก (checkbox/radio)", spec: "0-1-0" },
+                    { sel: ":disabled", desc: "เลือก input ที่ถูกปิดการใช้งาน (disabled)", spec: "0-1-0" },
+                    { sel: ":enabled", desc: "เลือก input ที่พร้อมใช้งาน (ไม่ disabled)", spec: "0-1-0" },
+                    { sel: ":focus", desc: "เลือก element ที่กำลังถูกคลิกหรือเลือกอยู่ (ลองคลิกที่ input ในโค้ด)", spec: "0-1-0" },
+                    { sel: "input:in-range", desc: "เลือก input ที่ค่าอยู่ในเกณฑ์ min/max", spec: "0-1-1" },
+                    { sel: "input:out-of-range", desc: "เลือก input ที่ค่าเกินเกณฑ์ min/max", spec: "0-1-1" },
+                    { sel: "input:invalid", desc: "เลือก input ที่ข้อมูลไม่ถูกต้องตาม type", spec: "0-1-1" },
+                    { sel: "input:valid", desc: "เลือก input ที่ข้อมูลถูกต้อง", spec: "0-1-1" }
+                ]
+            },
+            {
+                category: "Pseudo-class (State)",
+                items: [
+                    { sel: ":empty", desc: "เลือก element ที่ไม่มีเนื้อหาข้างในเลย (ไม่มี text หรือลูก)", spec: "0-1-0" },
+                    { sel: "h1:hover", desc: "เลือก h1 เมื่อนำเมาส์ไปชี้ (Hover)", spec: "0-1-1" },
+                    { sel: "p:lang(it)", desc: "เลือก p ที่ระบุ attribute lang='it'", spec: "0-1-1" },
+                    { sel: ":root", desc: "เลือกรากของ document (ปกติคือ <html>)", spec: "0-1-0" }
+                ]
+            },
+            {
+                category: "Pseudo-element",
+                items: [
+                    { sel: "p::first-letter", desc: "เลือกตัวอักษรตัวแรกของ <p> (แสดงผลเสมือน)", spec: "0-0-1 (Pseudo-element)" },
+                    { sel: "p::first-line", desc: "เลือกบรรทัดแรกของ <p>", spec: "0-0-1 (Pseudo-element)" }
+                ]
+            },
+            {
+                category: "Structural Pseudo-class",
+                items: [
+                    { sel: "p:first-child", desc: "เลือก <p> ที่เป็นลูกคนแรกของพ่อแม่มัน", spec: "0-1-1" },
+                    { sel: "p:last-child", desc: "เลือก <p> ที่เป็นลูกคนสุดท้าย", spec: "0-1-1" },
+                    { sel: "p:first-of-type", desc: "เลือก <p> ตัวแรก ในกลุ่มพี่น้องระดับเดียวกัน", spec: "0-1-1" },
+                    { sel: "p:last-of-type", desc: "เลือก <p> ตัวสุดท้าย ในกลุ่มพี่น้องระดับเดียวกัน", spec: "0-1-1" },
+                    { sel: "tr:nth-child(even)", desc: "เลือก <tr> ลำดับคู่ (2, 4, 6...)", spec: "0-1-1" },
+                    { sel: "tr:nth-child(odd)", desc: "เลือก <tr> ลำดับคี่ (1, 3, 5...)", spec: "0-1-1" },
+                    { sel: "li:nth-child(1)", desc: "เลือก <li> ตัวที่ 1", spec: "0-1-1" },
+                    { sel: "li:nth-last-child(1)", desc: "เลือก <li> ตัวที่ 1 (นับจากท้ายขึ้นมา)", spec: "0-1-1" },
+                    { sel: "li:nth-of-type(2)", desc: "เลือก <li> ตัวที่ 2 ของชนิดนี้", spec: "0-1-1" },
+                    { sel: "li:nth-last-of-type(2)", desc: "เลือก <li> ตัวที่ 2 (นับจากท้าย) ของชนิดนี้", spec: "0-1-1" },
+                    { sel: "b:only-child", desc: "เลือก <b> ที่เป็นลูกคนเดียว ไม่มีพี่น้องอื่น", spec: "0-1-1" },
+                    { sel: "h3:only-of-type", desc: "เลือก <h3> ที่เป็นชนิดนี้ตัวเดียวในพ่อแม่นั้น", spec: "0-1-1" }
+                ]
+            }
+        ];
+
+        // --- 2. สร้าง Mock DOM Structure (HTML ที่จะแสดงใน Code Display) ---
+        // เราใช้ function สร้าง HTML String แล้ว inject เข้าไปเพื่อความง่าย
+        // โดยใช้ data-tag และ data-attr เพื่อให้ CSS :before จัดรูปแบบให้สวยงาม
+        
+        function createTag(tag, attrs, content, children = "") {
+            let attrStr = "";
+            let dataAttrStr = "";
+            if (attrs) {
+                attrStr = " " + attrs;
+                // สร้าง string สำหรับโชว์ใน code view (ใส่สีให้ attribute)
+                const parts = attrs.split(' ');
+                dataAttrStr = parts.map(p => {
+                   const [key, val] = p.split('=');
+                   return val ? ` <span class='attr-key'>${key}</span>=<span class='attr-val'>${val}</span>` : ` <span class='attr-key'>${key}</span>`;
+                }).join('');
+            }
+
+            // ถ้ามี children เป็น string ธรรมดา ให้หุ้มด้วย span text-content
+            // ถ้าเป็น HTML (children) ให้ใส่เข้าไปเลย
+            let inner = content ? `<span class="text-content">${content}</span>` : children;
+
+            if (tag === 'input') {
+                return `<input ${attrStr} data-tag="${tag}" data-attr="${dataAttrStr.replace(/"/g, '&quot;')}" readonly onclick="return false;">`; // input ใน demo ห้ามแก้จริง แต่คลิกเพื่อ focus ได้
+            }
+            
+            return `<${tag} ${attrStr} data-tag="${tag}" data-attr="${dataAttrStr.replace(/"/g, '&quot;')}">${inner}</${tag}>`;
+        }
+
+        const sandboxHTML = `
+            ${createTag('h1', 'class="intro"', 'Welcome to CSS')}
+            ${createTag('p', 'class="intro"', 'Introduction paragraph.')}
+            ${createTag('div', 'id="Lastname"', 'Doe')}
+            
+            <div data-tag="div" data-attr="">
+                ${createTag('p', '', 'Paragraph inside Div (first-child)')}
+                ${createTag('p', 'class="myquote" lang="it" title="very beautiful"', 'Ciao! (Italian)')}
+                ${createTag('b', '', 'Bold text (only-child inside p)', createTag('p', '', '', createTag('b', '', 'Alone')))}
+            </div>
+
+            <ul data-tag="ul" data-attr="">
+                ${createTag('li', '', 'List Item 1')}
+                ${createTag('li', '', 'List Item 2')}
+                ${createTag('li', '', 'List Item 3')}
+            </ul>
+
+            ${createTag('p', '', 'Paragraph adjacent to UL (+p)')}
+            
+            <table data-tag="table" data-attr="border=&quot;1&quot;">
+                <tr data-tag="tr" data-attr="">
+                    ${createTag('td', '', 'Row 1 Col 1')}
+                    ${createTag('td', '', 'Row 1 Col 2')}
+                </tr>
+                <tr data-tag="tr" data-attr="">
+                    ${createTag('td', '', 'Row 2 Col 1')}
+                    ${createTag('td', '', 'Row 2 Col 2')}
+                </tr>
+                <tr data-tag="tr" data-attr="">
+                    ${createTag('td', '', 'Row 3 Col 1')}
+                    ${createTag('td', '', 'Row 3 Col 2')}
+                </tr>
+            </table>
+
+            ${createTag('address', 'id="my-Address"', '123 Fake St.')}
+            ${createTag('div', 'id="address"', 'Ends with ess')}
+            ${createTag('div', 'id="my-data"', 'Starts with my-')}
+            ${createTag('div', 'id="LongId"', 'Starts with L')}
+            ${createTag('div', 'id="some-id"', 'Contains s')}
+            
+            <div data-tag="div" data-attr="">
+               ${createTag('h3', '', 'Header 3 (only-of-type)')}
+               ${createTag('div', ':empty', '')} 
+            </div>
+
+            <form data-tag="form" data-attr="">
+                ${createTag('input', 'type="checkbox" checked', '')}
+                ${createTag('input', 'type="text" disabled value="Disabled"', '')}
+                ${createTag('input', 'type="text" required placeholder="Required"', '')}
+                ${createTag('input', 'type="number" min="1" max="10" value="15"', '')} ${createTag('input', 'type="email" value="not-an-email"', '')} </form>
+        `;
+
+        document.getElementById('sandbox').innerHTML = sandboxHTML;
+
+        // --- 3. สร้าง UI Sidebar ---
+        const selectorList = document.getElementById('selector-list');
+
+        selectorsData.forEach((group, index) => {
+            const catDiv = document.createElement('div');
+            catDiv.className = 'category';
+            
+            const title = document.createElement('div');
+            title.className = 'category-title';
+            title.innerText = group.category;
+            // Toggle visibility logic (optional)
+            title.onclick = () => {
+                const container = document.getElementById(`cat-${index}`);
+                container.style.display = container.style.display === 'none' ? 'block' : 'none';
+            };
+            
+            const btnContainer = document.createElement('div');
+            btnContainer.id = `cat-${index}`;
+            
+            group.items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = 'selector-btn';
+                btn.innerText = item.sel;
+                btn.onclick = () => handleSelect(btn, item);
+                btnContainer.appendChild(btn);
+            });
+
+            catDiv.appendChild(title);
+            catDiv.appendChild(btnContainer);
+            selectorList.appendChild(catDiv);
+        });
+
+        // --- 4. Core Logic: Handle Selection ---
+        function handleSelect(btn, item) {
+            // 4.1 UI Update
+            document.querySelectorAll('.selector-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            document.getElementById('current-selector').innerText = item.sel;
+            document.getElementById('specificity-display').innerText = `Specificity: ${item.spec}`;
+            document.getElementById('description-text').innerText = item.desc;
+            document.getElementById('css-selector-preview').innerText = item.sel;
+
+            // 4.2 Clear previous highlights
+            const sandbox = document.getElementById('sandbox');
+            sandbox.querySelectorAll('.matched').forEach(el => el.classList.remove('matched'));
+            
+            // 4.3 Apply new highlights
+            let count = 0;
+            try {
+                // Special handling for Pseudo-elements (JS can't select them)
+                if (item.sel.includes('::')) {
+                    // Highlight parent element instead and warn user
+                    const parentSel = item.sel.split('::')[0];
+                    const elements = sandbox.querySelectorAll(parentSel);
+                    elements.forEach(el => {
+                        el.classList.add('matched');
+                        count++;
+                    });
+                    document.getElementById('match-count').innerText = `พบ ${count} Element (Pseudo-element จะแสดงผลที่ Element แม่)`;
+                } 
+                // Special handling for :root
+                else if (item.sel === ':root') {
+                     // In this sandbox environment, we simulate root as the sandbox wrapper
+                     sandbox.classList.add('matched');
+                     document.getElementById('match-count').innerText = `เลือก Root Element (ในที่นี้คือ Container)`;
+                }
+                else {
+                    // Standard Selectors
+                    // เราต้องใช้ Scope เพื่อไม่ให้เลือกเกิน sandbox
+                    // แต่ querySelectorAll บน element (:scope) รองรับใน browser สมัยใหม่
+                    const elements = sandbox.querySelectorAll(`:scope ${item.sel}`);
+                    elements.forEach(el => {
+                        el.classList.add('matched');
+                        count++;
+                    });
+                    document.getElementById('match-count').innerText = `พบ ${count} Element ที่ตรงกัน`;
+                }
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('match-count').innerText = "Selector Error / Not supported in JS query";
+            }
+        }
+
+        // --- 5. Fix for Interactive Inputs in Mock DOM ---
+        // ให้ input ใน mock dom คลิกได้เพื่อเทส :focus แต่ไม่ให้เปลี่ยนค่า checkbox จริงจังเพื่อความสวยงาม
+        document.querySelectorAll('#sandbox input').forEach(input => {
+            input.addEventListener('click', (e) => {
+                // e.preventDefault(); // ถ้าใส่บรรทัดนี้ input จะไม่ focus
+                // ปล่อยให้ focus ทำงานเพื่อให้เห็นผล :focus selector
+            });
+        });
+
+    </script>
+</body>
+</html>
