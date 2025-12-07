@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Item Properties - Flexbox Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Introduction */
+        .intro {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .intro h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        
+        .intro p {
+            margin-bottom: 1rem;
+        }
+        
+        .intro ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Property Sections */
+        .property-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+        }
+        
+        .property-description {
+            margin-bottom: 2rem;
+        }
+        
+        .property-description h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            border-radius: 0 5px 5px 0;
+            overflow-x: auto;
+        }
+        
+        /* Demo Container */
+        .demo-container {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .demo-title {
+            background-color: #e9ecef;
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .flex-container {
+            display: flex;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            min-height: 200px;
+            gap: 10px;
+        }
+        
+        .flex-item {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .flex-item:nth-child(1) {
+            background-color: var(--primary);
+        }
+        
+        .flex-item:nth-child(2) {
+            background-color: var(--accent);
+        }
+        
+        .flex-item:nth-child(3) {
+            background-color: var(--success);
+        }
+        
+        .flex-item:nth-child(4) {
+            background-color: var(--warning);
+        }
+        
+        .flex-item:nth-child(5) {
+            background-color: var(--danger);
+        }
+        
+        .item-property {
+            font-size: 0.9rem;
+            font-weight: normal;
+            margin-top: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .control-group {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .control-group h4 {
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+        
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+        }
+        
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .slider-wrapper span {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        input[type="range"] {
+            flex-grow: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .value-display {
+            font-weight: bold;
+            color: var(--secondary);
+            background-color: #e9ecef;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        /* Comparison Section */
+        .comparison-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .comparison-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .comparison-box h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+            color: var(--gray);
+        }
+        
+        .summary {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .summary-card {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .summary-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-card p {
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .property-section {
+                padding: 1.5rem;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .comparison-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-boxes"></i> Flex Item Properties</h1>
+            <p>เรียนรู้และทดลองการกำหนดค่า flex-grow, flex-shrink, flex-basis และ flex สำหรับ Flex Item</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="intro">
+            <h2>Flexbox และ Item Properties</h2>
+            <p>Flexbox เป็นโมเดลการจัดเลย์เอาต์ใน CSS ที่ช่วยให้สามารถจัดเรียงและกระจายพื้นที่ระหว่าง Item ใน Container ได้อย่างมีประสิทธิภาพ</p>
+            <p>Flex Container จะมี Property สำหรับควบคุมการแสดงผลในระดับ Container ในขณะที่ Flex Item จะมี Property สำหรับควบคุมแต่ละ Item โดยเฉพาะ</p>
+            <p>Property สำคัญสำหรับ Flex Item ได้แก่:</p>
+            <ul>
+                <li><strong>flex-grow</strong> - กำหนดอัตราการขยายตัวของ Item เมื่อมีพื้นที่ว่าง</li>
+                <li><strong>flex-shrink</strong> - กำหนดอัตราการหดตัวของ Item เมื่อพื้นที่ไม่เพียงพอ</li>
+                <li><strong>flex-basis</strong> - กำหนดขนาดเริ่มต้นของ Item ก่อนที่จะขยายหรือหดตัว</li>
+                <li><strong>flex</strong> - Shorthand property สำหรับกำหนดค่าทั้งสามพร้อมกัน</li>
+            </ul>
+        </section>
+        
+        <section class="property-section">
+            <h2 class="section-title"><i class="fas fa-expand-alt"></i> flex-grow</h2>
+            
+            <div class="property-description">
+                <h3>คำอธิบาย</h3>
+                <p><strong>flex-grow</strong> กำหนดอัตราส่วนการขยายตัวของ Item เมื่อมีพื้นที่ว่างใน Container ค่าเริ่มต้นคือ 0 ซึ่งหมายความว่า Item จะไม่ขยายตัว</p>
+                <p>ถ้า Item ทั้งหมดมีค่า flex-grow เป็น 1 พื้นที่ว่างทั้งหมดจะถูกแบ่งให้กับ Item อย่างเท่าๆ กัน ถ้า Item หนึ่งมีค่าเป็น 2 และอีก Item มีค่าเป็น 1 Item ที่มีค่าเป็น 2 จะได้รับพื้นที่ว่างมากกว่าอีก Item หนึ่งเท่าตัว</p>
+                <div class="code-block">
+                    .item1 { flex-grow: 1; }<br>
+                    .item2 { flex-grow: 2; }<br>
+                    .item3 { flex-grow: 1; }
+                </div>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-title">
+                    <span>ตัวอย่างการทำงานของ flex-grow</span>
+                    <span>พื้นที่ว่างทั้งหมด: <span id="grow-space">500px</span></span>
+                </div>
+                <div class="flex-container" id="grow-demo">
+                    <div class="flex-item" id="grow-item1">
+                        Item 1
+                        <div class="item-property">flex-grow: <span id="grow-val1">1</span></div>
+                    </div>
+                    <div class="flex-item" id="grow-item2">
+                        Item 2
+                        <div class="item-property">flex-grow: <span id="grow-val2">2</span></div>
+                    </div>
+                    <div class="flex-item" id="grow-item3">
+                        Item 3
+                        <div class="item-property">flex-grow: <span id="grow-val3">1</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <h4>ปรับค่า flex-grow</h4>
+                    <div class="slider-container">
+                        <label for="grow-slider1">Item 1:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="grow-slider1" min="0" max="5" step="1" value="1">
+                            <span>5</span>
+                            <div class="value-display" id="grow-display1">1</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="grow-slider2">Item 2:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="grow-slider2" min="0" max="5" step="1" value="2">
+                            <span>5</span>
+                            <div class="value-display" id="grow-display2">2</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="grow-slider3">Item 3:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="grow-slider3" min="0" max="5" step="1" value="1">
+                            <span>5</span>
+                            <div class="value-display" id="grow-display3">1</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h4>พื้นที่ว่างใน Container</h4>
+                    <div class="slider-container">
+                        <label for="grow-space-slider">ปรับความกว้าง Container:</label>
+                        <div class="slider-wrapper">
+                            <span>400px</span>
+                            <input type="range" id="grow-space-slider" min="400" max="1000" step="50" value="800">
+                            <span>1000px</span>
+                            <div class="value-display" id="grow-space-display">800px</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">การปรับความกว้าง Container จะทำให้เห็นผลของ flex-grow ชัดเจนขึ้นเมื่อมีพื้นที่ว่างมากขึ้น</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="property-section">
+            <h2 class="section-title"><i class="fas fa-compress-alt"></i> flex-shrink</h2>
+            
+            <div class="property-description">
+                <h3>คำอธิบาย</h3>
+                <p><strong>flex-shrink</strong> กำหนดอัตราส่วนการหดตัวของ Item เมื่อพื้นที่ใน Container ไม่เพียงพอ ค่าเริ่มต้นคือ 1 ซึ่งหมายความว่า Item จะหดตัวเมื่อจำเป็น</p>
+                <p>ถ้า Item หนึ่งมีค่า flex-shrink เป็น 0 มันจะไม่หดตัวเลย ทำให้ Item อื่นอาจต้องหดตัวมากขึ้นเพื่อให้พอดีกับ Container</p>
+                <div class="code-block">
+                    .item1 { flex-shrink: 1; }<br>
+                    .item2 { flex-shrink: 0; } &lt;-- จะไม่หดตัว<br>
+                    .item3 { flex-shrink: 2; } &lt;-- จะหดตัวมากเป็น 2 เท่าของ Item 1
+                </div>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-title">
+                    <span>ตัวอย่างการทำงานของ flex-shrink</span>
+                    <span>พื้นที่ Container: <span id="shrink-space">400px</span> (Item รวมกันกว้าง 500px)</span>
+                </div>
+                <div class="flex-container" id="shrink-demo">
+                    <div class="flex-item" id="shrink-item1" style="width: 150px;">
+                        Item 1
+                        <div class="item-property">flex-shrink: <span id="shrink-val1">1</span></div>
+                    </div>
+                    <div class="flex-item" id="shrink-item2" style="width: 200px;">
+                        Item 2
+                        <div class="item-property">flex-shrink: <span id="shrink-val2">0</span></div>
+                    </div>
+                    <div class="flex-item" id="shrink-item3" style="width: 150px;">
+                        Item 3
+                        <div class="item-property">flex-shrink: <span id="shrink-val3">2</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <h4>ปรับค่า flex-shrink</h4>
+                    <div class="slider-container">
+                        <label for="shrink-slider1">Item 1:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="shrink-slider1" min="0" max="5" step="1" value="1">
+                            <span>5</span>
+                            <div class="value-display" id="shrink-display1">1</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="shrink-slider2">Item 2:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="shrink-slider2" min="0" max="5" step="1" value="0">
+                            <span>5</span>
+                            <div class="value-display" id="shrink-display2">0</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="shrink-slider3">Item 3:</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="shrink-slider3" min="0" max="5" step="1" value="2">
+                            <span>5</span>
+                            <div class="value-display" id="shrink-display3">2</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h4>ปรับขนาด Container</h4>
+                    <div class="slider-container">
+                        <label for="shrink-space-slider">ปรับความกว้าง Container:</label>
+                        <div class="slider-wrapper">
+                            <span>300px</span>
+                            <input type="range" id="shrink-space-slider" min="300" max="700" step="50" value="400">
+                            <span>700px</span>
+                            <div class="value-display" id="shrink-space-display">400px</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">Item รวมกันกว้าง 500px ดังนั้นถ้า Container แคบกว่า 500px จะเห็นการหดตัวของ Item</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="property-section">
+            <h2 class="section-title"><i class="fas fa-ruler"></i> flex-basis</h2>
+            
+            <div class="property-description">
+                <h3>คำอธิบาย</h3>
+                <p><strong>flex-basis</strong> กำหนดขนาดเริ่มต้นของ Item ก่อนที่จะขยายหรือหดตัวตามค่า flex-grow และ flex-shrink</p>
+                <p>flex-basis สามารถกำหนดได้ด้วยหน่วยต่างๆ เช่น px, %, em, rem หรือใช้ค่า auto (ค่าเริ่มต้น) ซึ่งจะใช้ขนาดตาม content ของ Item</p>
+                <div class="code-block">
+                    .item1 { flex-basis: 200px; }<br>
+                    .item2 { flex-basis: 30%; }<br>
+                    .item3 { flex-basis: auto; } &lt;-- ขนาดตาม content
+                </div>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-title">
+                    <span>ตัวอย่างการทำงานของ flex-basis</span>
+                </div>
+                <div class="flex-container" id="basis-demo">
+                    <div class="flex-item" id="basis-item1">
+                        Item 1
+                        <div class="item-property">flex-basis: <span id="basis-val1">200px</span></div>
+                    </div>
+                    <div class="flex-item" id="basis-item2">
+                        Item 2
+                        <div class="item-property">flex-basis: <span id="basis-val2">30%</span></div>
+                    </div>
+                    <div class="flex-item" id="basis-item3">
+                        Item 3
+                        <div class="item-property">flex-basis: <span id="basis-val3">auto</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <h4>ปรับค่า flex-basis</h4>
+                    <div class="slider-container">
+                        <label for="basis-slider1">Item 1 (px):</label>
+                        <div class="slider-wrapper">
+                            <span>100px</span>
+                            <input type="range" id="basis-slider1" min="100" max="400" step="50" value="200">
+                            <span>400px</span>
+                            <div class="value-display" id="basis-display1">200px</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="basis-slider2">Item 2 (%):</label>
+                        <div class="slider-wrapper">
+                            <span>10%</span>
+                            <input type="range" id="basis-slider2" min="10" max="50" step="5" value="30">
+                            <span>50%</span>
+                            <div class="value-display" id="basis-display2">30%</div>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <label for="basis-slider3">Item 3:</label>
+                        <div class="slider-wrapper">
+                            <span>auto</span>
+                            <input type="range" id="basis-slider3" min="0" max="2" step="1" value="0">
+                            <span>200px</span>
+                            <div class="value-display" id="basis-display3">auto</div>
+                        </div>
+                        <p style="font-size: 0.8rem; margin-top: 5px;">0=auto, 1=150px, 2=200px</p>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h4>การทำงานร่วมกับ flex-grow</h4>
+                    <div class="slider-container">
+                        <label for="basis-grow-slider">flex-grow (ทุก Item):</label>
+                        <div class="slider-wrapper">
+                            <span>0</span>
+                            <input type="range" id="basis-grow-slider" min="0" max="2" step="1" value="0">
+                            <span>2</span>
+                            <div class="value-display" id="basis-grow-display">0</div>
+                        </div>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem;">เมื่อมี flex-grow > 0, Item จะขยายจากขนาด flex-basis เริ่มต้น</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="property-section">
+            <h2 class="section-title"><i class="fas fa-code"></i> flex (Shorthand Property)</h2>
+            
+            <div class="property-description">
+                <h3>คำอธิบาย</h3>
+                <p><strong>flex</strong> เป็น shorthand property ที่รวม flex-grow, flex-shrink และ flex-basis ไว้ใน property เดียว</p>
+                <p>รูปแบบ: <code>flex: flex-grow flex-shrink flex-basis;</code></p>
+                <p>ตัวอย่าง:</p>
+                <div class="code-block">
+                    flex: 1; /* เท่ากับ flex: 1 1 0; */<br>
+                    flex: 0 0 200px; /* ไม่ขยาย ไม่หดตัว และมีขนาดเริ่มต้น 200px */<br>
+                    flex: 2 1 auto; /* ขยาย 2 เท่า, หดตัวปกติ, ขนาดตาม content */
+                </div>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-title">
+                    <span>ตัวอย่างการทำงานของ flex (shorthand)</span>
+                </div>
+                <div class="flex-container" id="flex-shorthand-demo">
+                    <div class="flex-item" id="flex-item1">
+                        Item 1
+                        <div class="item-property">flex: <span id="flex-val1">1 1 0</span></div>
+                    </div>
+                    <div class="flex-item" id="flex-item2">
+                        Item 2
+                        <div class="item-property">flex: <span id="flex-val2">0 0 200px</span></div>
+                    </div>
+                    <div class="flex-item" id="flex-item3">
+                        Item 3
+                        <div class="item-property">flex: <span id="flex-val3">2 1 auto</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison-section">
+                <div class="comparison-box">
+                    <h3>flex: none</h3>
+                    <div class="flex-container" style="min-height: 120px;">
+                        <div class="flex-item" style="flex: none; width: 150px;">Item 1<br><small>flex: none</small></div>
+                        <div class="flex-item" style="flex: none; width: 150px;">Item 2<br><small>flex: none</small></div>
+                        <div class="flex-item" style="flex: none; width: 150px;">Item 3<br><small>flex: none</small></div>
+                    </div>
+                    <p style="margin-top: 1rem;"><code>flex: none;</code> เท่ากับ <code>flex: 0 0 auto;</code> ไม่ขยาย ไม่หดตัว ขนาดตาม width/height</p>
+                </div>
+                
+                <div class="comparison-box">
+                    <h3>flex: auto</h3>
+                    <div class="flex-container" style="min-height: 120px;">
+                        <div class="flex-item" style="flex: auto;">Item 1<br><small>flex: auto</small></div>
+                        <div class="flex-item" style="flex: auto;">Item 2<br><small>flex: auto</small></div>
+                        <div class="flex-item" style="flex: auto;">Item 3<br><small>flex: auto</small></div>
+                    </div>
+                    <p style="margin-top: 1rem;"><code>flex: auto;</code> เท่ากับ <code>flex: 1 1 auto;</code> ขยายและหดตัวได้ ขนาดตาม content</p>
+                </div>
+                
+                <div class="comparison-box">
+                    <h3>flex: 1</h3>
+                    <div class="flex-container" style="min-height: 120px;">
+                        <div class="flex-item" style="flex: 1;">Item 1<br><small>flex: 1</small></div>
+                        <div class="flex-item" style="flex: 1;">Item 2<br><small>flex: 1</small></div>
+                        <div class="flex-item" style="flex: 1;">Item 3<br><small>flex: 1</small></div>
+                    </div>
+                    <p style="margin-top: 1rem;"><code>flex: 1;</code> เท่ากับ <code>flex: 1 1 0;</code> ขยายและหดตัวได้ ขนาดเริ่มต้นเป็น 0</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="summary">
+            <h2><i class="fas fa-clipboard-check"></i> สรุป Flex Item Properties</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem;">Property ที่สำคัญสำหรับการควบคุม Flex Item แต่ละอัน</p>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h4>flex-grow</h4>
+                    <p>ควบคุมการขยายตัวของ Item เมื่อมีพื้นที่ว่างใน Container ค่าเริ่มต้นคือ 0 (ไม่ขยายตัว)</p>
+                    <p><strong>ใช้งานเมื่อ:</strong> ต้องการให้ Item ขยายตัวเพื่อใช้พื้นที่ว่างทั้งหมด</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>flex-shrink</h4>
+                    <p>ควบคุมการหดตัวของ Item เมื่อพื้นที่ไม่เพียงพอ ค่าเริ่มต้นคือ 1 (หดตัวได้)</p>
+                    <p><strong>ใช้งานเมื่อ:</strong> ต้องการควบคุมว่า Item ใดควรหดตัวมากหรือน้อยเมื่อ Container แคบ</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>flex-basis</h4>
+                    <p>กำหนดขนาดเริ่มต้นของ Item ก่อนการขยายหรือหดตัว ค่าเริ่มต้นคือ auto (ตาม content)</p>
+                    <p><strong>ใช้งานเมื่อ:</strong> ต้องการกำหนดขนาดพื้นฐานของ Item ก่อนคำนวณพื้นที่ที่เหลือ</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4>flex (shorthand)</h4>
+                    <p>รวมค่าทั้งสามไว้ใน property เดียว รูปแบบ: flex: grow shrink basis;</p>
+                    <p><strong>ตัวอย่าง:</strong> flex: 1 0 200px; (ขยายได้, ไม่หดตัว, ขนาดเริ่มต้น 200px)</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background-color: #e7f3ff; border-radius: 8px;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">ข้อแนะนำการใช้งาน</h3>
+                <ul style="margin-left: 1.5rem;">
+                    <li>ใช้ <strong>flex-grow</strong> สำหรับการแบ่งพื้นที่ว่างอย่างเป็นสัดส่วน</li>
+                    <li>ใช้ <strong>flex-shrink: 0</strong> สำหรับ Item ที่ไม่ควรหดตัว (เช่น รูปภาพหรือ component บางประเภท)</li>
+                    <li>ใช้ <strong>flex-basis</strong> ร่วมกับ <strong>flex-grow</strong> เมื่อต้องการกำหนดขนาดเริ่มต้นก่อนขยาย</li>
+                    <li>ใช้ <strong>flex</strong> shorthand สำหรับความสะดวกรวดเร็ว</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="container">
+        <p>สร้างขึ้นเพื่อการเรียนรู้ Flexbox และ Flex Item Properties</p>
+        <p style="margin-top: 5px;">สามารถปรับค่าต่างๆ ในตัวอย่างด้านบนเพื่อดูผลลัพธ์แบบ Real-time</p>
+    </footer>
+
+    <script>
+        // Flex-grow controls
+        const growSlider1 = document.getElementById('grow-slider1');
+        const growSlider2 = document.getElementById('grow-slider2');
+        const growSlider3 = document.getElementById('grow-slider3');
+        const growSpaceSlider = document.getElementById('grow-space-slider');
+        
+        const growDisplay1 = document.getElementById('grow-display1');
+        const growDisplay2 = document.getElementById('grow-display2');
+        const growDisplay3 = document.getElementById('grow-display3');
+        const growSpaceDisplay = document.getElementById('grow-space-display');
+        const growSpaceText = document.getElementById('grow-space');
+        
+        const growItem1 = document.getElementById('grow-item1');
+        const growItem2 = document.getElementById('grow-item2');
+        const growItem3 = document.getElementById('grow-item3');
+        const growDemo = document.getElementById('grow-demo');
+        
+        const growVal1 = document.getElementById('grow-val1');
+        const growVal2 = document.getElementById('grow-val2');
+        const growVal3 = document.getElementById('grow-val3');
+        
+        function updateGrowDemo() {
+            const grow1 = growSlider1.value;
+            const grow2 = growSlider2.value;
+            const grow3 = growSlider3.value;
+            const containerWidth = growSpaceSlider.value;
+            
+            // Update displays
+            growDisplay1.textContent = grow1;
+            growDisplay2.textContent = grow2;
+            growDisplay3.textContent = grow3;
+            growSpaceDisplay.textContent = containerWidth + 'px';
+            growSpaceText.textContent = containerWidth + 'px';
+            
+            // Update item properties
+            growItem1.style.flexGrow = grow1;
+            growItem2.style.flexGrow = grow2;
+            growItem3.style.flexGrow = grow3;
+            growDemo.style.width = containerWidth + 'px';
+            
+            // Update value displays in items
+            growVal1.textContent = grow1;
+            growVal2.textContent = grow2;
+            growVal3.textContent = grow3;
+        }
+        
+        growSlider1.addEventListener('input', updateGrowDemo);
+        growSlider2.addEventListener('input', updateGrowDemo);
+        growSlider3.addEventListener('input', updateGrowDemo);
+        growSpaceSlider.addEventListener('input', updateGrowDemo);
+        
+        // Flex-shrink controls
+        const shrinkSlider1 = document.getElementById('shrink-slider1');
+        const shrinkSlider2 = document.getElementById('shrink-slider2');
+        const shrinkSlider3 = document.getElementById('shrink-slider3');
+        const shrinkSpaceSlider = document.getElementById('shrink-space-slider');
+        
+        const shrinkDisplay1 = document.getElementById('shrink-display1');
+        const shrinkDisplay2 = document.getElementById('shrink-display2');
+        const shrinkDisplay3 = document.getElementById('shrink-display3');
+        const shrinkSpaceDisplay = document.getElementById('shrink-space-display');
+        const shrinkSpaceText = document.getElementById('shrink-space');
+        
+        const shrinkItem1 = document.getElementById('shrink-item1');
+        const shrinkItem2 = document.getElementById('shrink-item2');
+        const shrinkItem3 = document.getElementById('shrink-item3');
+        const shrinkDemo = document.getElementById('shrink-demo');
+        
+        const shrinkVal1 = document.getElementById('shrink-val1');
+        const shrinkVal2 = document.getElementById('shrink-val2');
+        const shrinkVal3 = document.getElementById('shrink-val3');
+        
+        function updateShrinkDemo() {
+            const shrink1 = shrinkSlider1.value;
+            const shrink2 = shrinkSlider2.value;
+            const shrink3 = shrinkSlider3.value;
+            const containerWidth = shrinkSpaceSlider.value;
+            
+            // Update displays
+            shrinkDisplay1.textContent = shrink1;
+            shrinkDisplay2.textContent = shrink2;
+            shrinkDisplay3.textContent = shrink3;
+            shrinkSpaceDisplay.textContent = containerWidth + 'px';
+            shrinkSpaceText.textContent = containerWidth + 'px';
+            
+            // Update item properties
+            shrinkItem1.style.flexShrink = shrink1;
+            shrinkItem2.style.flexShrink = shrink2;
+            shrinkItem3.style.flexShrink = shrink3;
+            shrinkDemo.style.width = containerWidth + 'px';
+            
+            // Update value displays in items
+            shrinkVal1.textContent = shrink1;
+            shrinkVal2.textContent = shrink2;
+            shrinkVal3.textContent = shrink3;
+        }
+        
+        shrinkSlider1.addEventListener('input', updateShrinkDemo);
+        shrinkSlider2.addEventListener('input', updateShrinkDemo);
+        shrinkSlider3.addEventListener('input', updateShrinkDemo);
+        shrinkSpaceSlider.addEventListener('input', updateShrinkDemo);
+        
+        // Flex-basis controls
+        const basisSlider1 = document.getElementById('basis-slider1');
+        const basisSlider2 = document.getElementById('basis-slider2');
+        const basisSlider3 = document.getElementById('basis-slider3');
+        const basisGrowSlider = document.getElementById('basis-grow-slider');
+        
+        const basisDisplay1 = document.getElementById('basis-display1');
+        const basisDisplay2 = document.getElementById('basis-display2');
+        const basisDisplay3 = document.getElementById('basis-display3');
+        const basisGrowDisplay = document.getElementById('basis-grow-display');
+        
+        const basisItem1 = document.getElementById('basis-item1');
+        const basisItem2 = document.getElementById('basis-item2');
+        const basisItem3 = document.getElementById('basis-item3');
+        
+        const basisVal1 = document.getElementById('basis-val1');
+        const basisVal2 = document.getElementById('basis-val2');
+        const basisVal3 = document.getElementById('basis-val3');
+        
+        function updateBasisDemo() {
+            const basis1 = basisSlider1.value + 'px';
+            let basis2 = basisSlider2.value + '%';
+            let basis3Value = basisSlider3.value;
+            let basis3;
+            
+            // Map basis3 slider value to actual basis values
+            if (basis3Value == 0) basis3 = 'auto';
+            else if (basis3Value == 1) basis3 = '150px';
+            else basis3 = '200px';
+            
+            const growValue = basisGrowSlider.value;
+            
+            // Update displays
+            basisDisplay1.textContent = basis1;
+            basisDisplay2.textContent = basis2;
+            basisDisplay3.textContent = basis3;
+            basisGrowDisplay.textContent = growValue;
+            
+            // Update item properties
+            basisItem1.style.flexBasis = basis1;
+            basisItem2.style.flexBasis = basis2;
+            basisItem3.style.flexBasis = basis3;
+            
+            // Apply grow value to all items
+            basisItem1.style.flexGrow = growValue;
+            basisItem2.style.flexGrow = growValue;
+            basisItem3.style.flexGrow = growValue;
+            
+            // Update value displays in items
+            basisVal1.textContent = basis1;
+            basisVal2.textContent = basis2;
+            basisVal3.textContent = basis3;
+        }
+        
+        basisSlider1.addEventListener('input', updateBasisDemo);
+        basisSlider2.addEventListener('input', updateBasisDemo);
+        basisSlider3.addEventListener('input', updateBasisDemo);
+        basisGrowSlider.addEventListener('input', updateBasisDemo);
+        
+        // Initialize all demos
+        updateGrowDemo();
+        updateShrinkDemo();
+        updateBasisDemo();
+        
+        // Add some interactive tips
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add resize observer for shrink demo to show actual widths
+            const resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    if (entry.target.id === 'shrink-demo') {
+                        const containerWidth = Math.floor(entry.contentRect.width);
+                        shrinkSpaceText.textContent = containerWidth + 'px';
+                        shrinkSpaceDisplay.textContent = containerWidth + 'px';
+                        shrinkSpaceSlider.value = containerWidth;
+                    }
+                }
+            });
+            
+            resizeObserver.observe(shrinkDemo);
+            
+            // Add tooltip-like behavior for code blocks
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.addEventListener('click', function() {
+                    const text = this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check"></i> คัดลอกโค้ดแล้ว!';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

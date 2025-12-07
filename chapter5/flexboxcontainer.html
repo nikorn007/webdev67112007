@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Flexbox Playground</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .playground {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: var(--primary);
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        .flex-container {
+            height: 400px;
+            border: 3px dashed var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+            background-color: #f8f9ff;
+            transition: all 0.3s ease;
+            display: flex;
+        }
+
+        .flex-item {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            min-width: 80px;
+            min-height: 80px;
+            margin: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .flex-item:nth-child(2) {
+            background-color: var(--accent);
+        }
+
+        .flex-item:nth-child(3) {
+            background-color: var(--success);
+        }
+
+        .flex-item:nth-child(4) {
+            background-color: #7209b7;
+        }
+
+        .flex-item:nth-child(5) {
+            background-color: #f8961e;
+        }
+
+        .flex-item:nth-child(6) {
+            background-color: #43aa8b;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .property-name {
+            font-family: monospace;
+            background-color: var(--light-gray);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--dark);
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 10px 15px;
+            background-color: var(--light-gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .option:hover {
+            background-color: #d3d9e8;
+            transform: translateY(-2px);
+        }
+
+        .option.active {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+
+        .code-display {
+            background-color: var(--dark);
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: monospace;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .code-line {
+            margin-bottom: 8px;
+        }
+
+        .css-property {
+            color: #6cb2eb;
+        }
+
+        .css-value {
+            color: #f6993f;
+        }
+
+        .explanation {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .explanation-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .property-explanation {
+            background-color: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .property-explanation h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-explanation ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .property-explanation li {
+            margin-bottom: 5px;
+        }
+
+        .value-example {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(247, 37, 133, 0.3);
+        }
+
+        .reset-btn:hover {
+            background-color: #e11571;
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-gray);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                gap: 20px;
+            }
+
+            .playground,
+            .controls,
+            .explanation {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .options {
+                flex-direction: column;
+            }
+
+            .flex-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-th-large"></i> Interactive Flexbox Playground</h1>
+            <p class="subtitle">ทดลองปรับค่าต่างๆ ของ Flexbox Container เพื่อดูความแตกต่างของการจัดวาง Items
+                พร้อมคำอธิบายและตัวอย่างโค้ด</p>
+        </header>
+
+        <div class="content">
+            <div class="playground">
+                <h2 class="section-title"><i class="fas fa-laptop-code"></i> Flexbox Playground</h2>
+                <p style="margin-bottom: 15px; color: var(--gray);">Container (สีน้ำเงิน) และ Items (สีต่างๆ)
+                    จะแสดงผลตามค่าที่คุณเลือก</p>
+                <div class="flex-container" id="flexContainer">
+                    <div class="flex-item">1</div>
+                    <div class="flex-item">2</div>
+                    <div class="flex-item">3</div>
+                    <div class="flex-item">4</div>
+                    <div class="flex-item">5</div>
+                    <div class="flex-item">6</div>
+                </div>
+
+                <h3 class="section-title"><i class="fas fa-code"></i> CSS Code</h3>
+                <div class="code-display">
+                    <div class="code-line">.container {</div>
+                    <div class="code-line"> <span class="css-property">display</span>: <span class="css-value"
+                            id="displayValue">flex</span>;</div>
+                    <div class="code-line"> <span class="css-property">flex-direction</span>: <span class="css-value"
+                            id="directionValue">row</span>;</div>
+                    <div class="code-line"> <span class="css-property">justify-content</span>: <span class="css-value"
+                            id="justifyValue">flex-start</span>;</div>
+                    <div class="code-line"> <span class="css-property">align-items</span>: <span class="css-value"
+                            id="alignValue">stretch</span>;</div>
+                    <div class="code-line"> <span class="css-property">flex-wrap</span>: <span class="css-value"
+                            id="wrapValue">nowrap</span>;</div>
+                    <div class="code-line"> <span class="css-property">gap</span>: <span class="css-value"
+                            id="gapValue">10px</span>;</div>
+                    <div class="code-line">}</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> Controls</h2>
+                <p style="margin-bottom: 20px; color: var(--gray);">คลิกเลือกค่าเพื่อเปลี่ยนการแสดงผลของ Flex Container
+                </p>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>display</span>
+                        <span class="property-name">กำหนดประเภทการแสดงผล</span>
+                    </div>
+                    <div class="options" id="displayOptions">
+                        <div class="option active" data-value="flex">flex</div>
+                        <div class="option" data-value="inline-flex">inline-flex</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>flex-direction</span>
+                        <span class="property-name">กำหนดทิศทางของ items</span>
+                    </div>
+                    <div class="options" id="directionOptions">
+                        <div class="option active" data-value="row">row</div>
+                        <div class="option" data-value="row-reverse">row-reverse</div>
+                        <div class="option" data-value="column">column</div>
+                        <div class="option" data-value="column-reverse">column-reverse</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>justify-content</span>
+                        <span class="property-name">จัด items ตามแกนหลัก</span>
+                    </div>
+                    <div class="options" id="justifyOptions">
+                        <div class="option active" data-value="flex-start">flex-start</div>
+                        <div class="option" data-value="flex-end">flex-end</div>
+                        <div class="option" data-value="center">center</div>
+                        <div class="option" data-value="space-between">space-between</div>
+                        <div class="option" data-value="space-around">space-around</div>
+                        <div class="option" data-value="space-evenly">space-evenly</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>align-items</span>
+                        <span class="property-name">จัด items ตามแกนขวาง</span>
+                    </div>
+                    <div class="options" id="alignOptions">
+                        <div class="option active" data-value="stretch">stretch</div>
+                        <div class="option" data-value="flex-start">flex-start</div>
+                        <div class="option" data-value="flex-end">flex-end</div>
+                        <div class="option" data-value="center">center</div>
+                        <div class="option" data-value="baseline">baseline</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>flex-wrap</span>
+                        <span class="property-name">กำหนดการตัดบรรทัด items</span>
+                    </div>
+                    <div class="options" id="wrapOptions">
+                        <div class="option active" data-value="nowrap">nowrap</div>
+                        <div class="option" data-value="wrap">wrap</div>
+                        <div class="option" data-value="wrap-reverse">wrap-reverse</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-label">
+                        <span>gap</span>
+                        <span class="property-name">กำหนดระยะห่างระหว่าง items</span>
+                    </div>
+                    <div class="options" id="gapOptions">
+                        <div class="option active" data-value="0">0</div>
+                        <div class="option" data-value="10px">10px</div>
+                        <div class="option" data-value="20px">20px</div>
+                        <div class="option" data-value="30px">30px</div>
+                    </div>
+                </div>
+
+                <button class="reset-btn" id="resetBtn">
+                    <i class="fas fa-redo-alt"></i> รีเซ็ตค่าเริ่มต้น
+                </button>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h2 class="section-title"><i class="fas fa-info-circle"></i> คำอธิบาย Flexbox Properties</h2>
+            <div class="explanation-content">
+                <div class="property-explanation">
+                    <h4><i class="fas fa-box"></i> display</h4>
+                    <p>กำหนดประเภทการแสดงผลของ container</p>
+                    <ul>
+                        <li><span class="value-example">flex</span>: แสดงผลเป็น block-level flex container</li>
+                        <li><span class="value-example">inline-flex</span>: แสดงผลเป็น inline-level flex container</li>
+                    </ul>
+                </div>
+
+                <div class="property-explanation">
+                    <h4><i class="fas fa-arrows-alt-h"></i> flex-direction</h4>
+                    <p>กำหนดทิศทางของ items ภายใน container</p>
+                    <ul>
+                        <li><span class="value-example">row</span>: เรียง items ในแนวนอน (จากซ้ายไปขวา)</li>
+                        <li><span class="value-example">row-reverse</span>: เรียง items ในแนวนอน (จากขวาไปซ้าย)</li>
+                        <li><span class="value-example">column</span>: เรียง items ในแนวตั้ง (จากบนลงล่าง)</li>
+                        <li><span class="value-example">column-reverse</span>: เรียง items ในแนวตั้ง (จากล่างขึ้นบน)
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="property-explanation">
+                    <h4><i class="fas fa-align-left"></i> justify-content</h4>
+                    <p>จัด items ตามแกนหลัก (main axis)</p>
+                    <ul>
+                        <li><span class="value-example">flex-start</span>: จัดชิดเริ่มต้นของแกนหลัก</li>
+                        <li><span class="value-example">flex-end</span>: จัดชิดปลายของแกนหลัก</li>
+                        <li><span class="value-example">center</span>: จัดกึ่งกลางแกนหลัก</li>
+                        <li><span class="value-example">space-between</span>: กระจาย items โดยมีช่องว่างระหว่าง items
+                        </li>
+                        <li><span class="value-example">space-around</span>: กระจาย items โดยมีช่องว่างรอบๆ แต่ละ item
+                        </li>
+                        <li><span class="value-example">space-evenly</span>: กระจาย items โดยมีช่องว่างเท่าๆ กัน</li>
+                    </ul>
+                </div>
+
+                <div class="property-explanation">
+                    <h4><i class="fas fa-align-center"></i> align-items</h4>
+                    <p>จัด items ตามแกนขวาง (cross axis)</p>
+                    <ul>
+                        <li><span class="value-example">stretch</span>: ยืด items ให้เต็มความสูง/ความกว้างของ container
+                        </li>
+                        <li><span class="value-example">flex-start</span>: จัดชิดเริ่มต้นของแกนขวาง</li>
+                        <li><span class="value-example">flex-end</span>: จัดชิดปลายของแกนขวาง</li>
+                        <li><span class="value-example">center</span>: จัดกึ่งกลางแกนขวาง</li>
+                        <li><span class="value-example">baseline</span>: จัดตาม baseline ของข้อความใน items</li>
+                    </ul>
+                </div>
+
+                <div class="property-explanation">
+                    <h4><i class="fas fa-expand-alt"></i> flex-wrap</h4>
+                    <p>กำหนดการตัดบรรทัดเมื่อ items มีจำนวนมากเกินไป</p>
+                    <ul>
+                        <li><span class="value-example">nowrap</span>: items จะไม่ตัดบรรทัด (ขนาดจะถูกบีบอัด)</li>
+                        <li><span class="value-example">wrap</span>: items จะตัดบรรทัดลงมาเมื่อไม่มีพื้นที่พอ</li>
+                        <li><span class="value-example">wrap-reverse</span>: items จะตัดบรรทัดขึ้นด้านบน</li>
+                    </ul>
+                </div>
+
+                <div class="property-explanation">
+                    <h4><i class="fas fa-arrows-alt-v"></i> gap</h4>
+                    <p>กำหนดระยะห่างระหว่าง items</p>
+                    <ul>
+                        <li><span class="value-example">0</span>: ไม่มีระยะห่างระหว่าง items</li>
+                        <li><span class="value-example">10px</span>: มีระยะห่าง 10px ระหว่าง items</li>
+                        <li><span class="value-example">20px</span>: มีระยะห่าง 20px ระหว่าง items</li>
+                        <li><span class="value-example">30px</span>: มีระยะห่าง 30px ระหว่าง items</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Interactive Flexbox Playground | Created for learning CSS Flexbox | © 2023</p>
+            <p style="margin-top: 10px;">ทดลองเปลี่ยนค่าต่างๆ เพื่อดูการทำงานของ Flexbox Container และ Items</p>
+        </footer>
+    </div>
+
+    <script>
+        // เก็บค่าเริ่มต้น
+        const defaultValues = {
+            display: 'flex',
+            direction: 'row',
+            justify: 'flex-start',
+            align: 'stretch',
+            wrap: 'nowrap',
+            gap: '0'
+        };
+
+        // อ้างอิงถึง DOM elements
+        const flexContainer = document.getElementById('flexContainer');
+        const displayOptions = document.querySelectorAll('#displayOptions .option');
+        const directionOptions = document.querySelectorAll('#directionOptions .option');
+        const justifyOptions = document.querySelectorAll('#justifyOptions .option');
+        const alignOptions = document.querySelectorAll('#alignOptions .option');
+        const wrapOptions = document.querySelectorAll('#wrapOptions .option');
+        const gapOptions = document.querySelectorAll('#gapOptions .option');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // อ้างอิงถึง elements สำหรับแสดงโค้ด
+        const displayValue = document.getElementById('displayValue');
+        const directionValue = document.getElementById('directionValue');
+        const justifyValue = document.getElementById('justifyValue');
+        const alignValue = document.getElementById('alignValue');
+        const wrapValue = document.getElementById('wrapValue');
+        const gapValue = document.getElementById('gapValue');
+
+        // ฟังก์ชันสำหรับอัปเดตการแสดงผล
+        function updateFlexbox() {
+            // อ่านค่าจากคลาสที่ active
+            const display = document.querySelector('#displayOptions .option.active').dataset.value;
+            const direction = document.querySelector('#directionOptions .option.active').dataset.value;
+            const justify = document.querySelector('#justifyOptions .option.active').dataset.value;
+            const align = document.querySelector('#alignOptions .option.active').dataset.value;
+            const wrap = document.querySelector('#wrapOptions .option.active').dataset.value;
+            const gap = document.querySelector('#gapOptions .option.active').dataset.value;
+
+            // อัปเดต container
+            flexContainer.style.display = display;
+            flexContainer.style.flexDirection = direction;
+            flexContainer.style.justifyContent = justify;
+            flexContainer.style.alignItems = align;
+            flexContainer.style.flexWrap = wrap;
+            flexContainer.style.gap = gap;
+
+            // อัปเดตโค้ดที่แสดง
+            displayValue.textContent = display;
+            directionValue.textContent = direction;
+            justifyValue.textContent = justify;
+            alignValue.textContent = align;
+            wrapValue.textContent = wrap;
+            gapValue.textContent = gap;
+        }
+
+        // ฟังก์ชันสำหรับเปลี่ยนค่าที่เลือก
+        function selectOption(options, selectedOption) {
+            options.forEach(option => option.classList.remove('active'));
+            selectedOption.classList.add('active');
+            updateFlexbox();
+        }
+
+        // เพิ่ม event listeners สำหรับ display
+        displayOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(displayOptions, option));
+        });
+
+        // เพิ่ม event listeners สำหรับ flex-direction
+        directionOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(directionOptions, option));
+        });
+
+        // เพิ่ม event listeners สำหรับ justify-content
+        justifyOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(justifyOptions, option));
+        });
+
+        // เพิ่ม event listeners สำหรับ align-items
+        alignOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(alignOptions, option));
+        });
+
+        // เพิ่ม event listeners สำหรับ flex-wrap
+        wrapOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(wrapOptions, option));
+        });
+
+        // เพิ่ม event listeners สำหรับ gap
+        gapOptions.forEach(option => {
+            option.addEventListener('click', () => selectOption(gapOptions, option));
+        });
+
+        // ฟังก์ชันรีเซ็ตค่าเริ่มต้น
+        function resetToDefaults() {
+            // ค้นหาและเลือก options ตามค่าเริ่มต้น
+            document.querySelector(`#displayOptions .option[data-value="${defaultValues.display}"]`).click();
+            document.querySelector(`#directionOptions .option[data-value="${defaultValues.direction}"]`).click();
+            document.querySelector(`#justifyOptions .option[data-value="${defaultValues.justify}"]`).click();
+            document.querySelector(`#alignOptions .option[data-value="${defaultValues.align}"]`).click();
+            document.querySelector(`#wrapOptions .option[data-value="${defaultValues.wrap}"]`).click();
+            document.querySelector(`#gapOptions .option[data-value="${defaultValues.gap}"]`).click();
+
+            // อัปเดตการแสดงผล
+            updateFlexbox();
+        }
+
+        // เพิ่ม event listener สำหรับปุ่มรีเซ็ต
+        resetBtn.addEventListener('click', resetToDefaults);
+
+        // เรียกใช้ฟังก์ชันเริ่มต้นเพื่อตั้งค่าเริ่มต้น
+        updateFlexbox();
+
+        // เพิ่มตัวอย่างการใช้งานต่างๆ เมื่อโหลดหน้าเว็บ
+        window.addEventListener('load', () => {
+            // สร้างตัวอย่างการสาธิต
+            setTimeout(() => {
+                // สาธิตการเปลี่ยน flex-direction
+                document.querySelector('#directionOptions .option[data-value="column"]').click();
+
+                setTimeout(() => {
+                    // สาธิตการเปลี่ยน justify-content
+                    document.querySelector('#justifyOptions .option[data-value="center"]').click();
+
+                    setTimeout(() => {
+                        // สาธิตการเปลี่ยน align-items
+                        document.querySelector('#alignOptions .option[data-value="center"]').click();
+
+                        setTimeout(() => {
+                            // สาธิตการเปลี่ยน flex-wrap และ gap
+                            document.querySelector('#wrapOptions .option[data-value="wrap"]').click();
+                            document.querySelector('#gapOptions .option[data-value="20px"]').click();
+
+                            setTimeout(() => {
+                                // รีเซ็ตกลับไปค่าเริ่มต้น
+                                resetToDefaults();
+                            }, 2000);
+                        }, 2000);
+                    }, 2000);
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

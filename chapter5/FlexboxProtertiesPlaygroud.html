@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Item Properties Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        /* Custom scrollbar for better look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4F46E5;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        
+        .flex-item {
+            transition: all 0.3s ease;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* Container Stripes Background */
+        .striped-bg {
+            background-image: linear-gradient(45deg, #f3f4f6 25%, #e5e7eb 25%, #e5e7eb 50%, #f3f4f6 50%, #f3f4f6 75%, #e5e7eb 75%, #e5e7eb 100%);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-10">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white p-6 shadow-md">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold mb-2">Flex Item Properties Playground</h1>
+            <p class="text-indigo-100">ทดลองปรับค่า <code class="bg-indigo-800 px-2 py-0.5 rounded">flex-grow</code>, <code class="bg-indigo-800 px-2 py-0.5 rounded">flex-shrink</code>, และ <code class="bg-indigo-800 px-2 py-0.5 rounded">flex-basis</code> เพื่อดูความแตกต่าง</p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 space-y-8">
+
+        <!-- Control Area & Preview -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Controls (Left Side) -->
+            <div class="lg:col-span-4 space-y-4">
+                
+                <!-- Container Width Control -->
+                <div class="bg-white p-4 rounded-lg shadow border border-slate-200">
+                    <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                        </svg>
+                        ปรับความกว้าง Container
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-3">ยืด/หด กล่องแม่ เพื่อดูผลของ shrink และ grow</p>
+                    <input type="range" id="containerWidth" min="300" max="1000" value="800" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span>แคบ (ทดสอบ Shrink)</span>
+                        <span id="containerWidthDisplay">800px</span>
+                        <span>กว้าง (ทดสอบ Grow)</span>
+                    </div>
+                </div>
+
+                <!-- Item 1 Controls -->
+                <div class="bg-white p-4 rounded-lg shadow border-l-8 border-rose-500">
+                    <h3 class="font-bold text-rose-600 mb-3">Item 1 (สีแดง)</h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-grow</label>
+                                <span id="val-1-grow" class="font-mono bg-slate-100 px-1 rounded">0</span>
+                            </div>
+                            <input type="range" data-item="1" data-prop="grow" min="0" max="5" value="0" class="w-full h-2 bg-rose-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-shrink</label>
+                                <span id="val-1-shrink" class="font-mono bg-slate-100 px-1 rounded">1</span>
+                            </div>
+                            <input type="range" data-item="1" data-prop="shrink" min="0" max="5" value="1" class="w-full h-2 bg-rose-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-basis</label>
+                                <span id="val-1-basis" class="font-mono bg-slate-100 px-1 rounded">150px</span>
+                            </div>
+                            <input type="range" data-item="1" data-prop="basis" min="50" max="300" step="10" value="150" class="w-full h-2 bg-rose-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 Controls -->
+                <div class="bg-white p-4 rounded-lg shadow border-l-8 border-emerald-500">
+                    <h3 class="font-bold text-emerald-600 mb-3">Item 2 (สีเขียว)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-grow</label>
+                                <span id="val-2-grow" class="font-mono bg-slate-100 px-1 rounded">0</span>
+                            </div>
+                            <input type="range" data-item="2" data-prop="grow" min="0" max="5" value="0" class="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-shrink</label>
+                                <span id="val-2-shrink" class="font-mono bg-slate-100 px-1 rounded">1</span>
+                            </div>
+                            <input type="range" data-item="2" data-prop="shrink" min="0" max="5" value="1" class="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-basis</label>
+                                <span id="val-2-basis" class="font-mono bg-slate-100 px-1 rounded">150px</span>
+                            </div>
+                            <input type="range" data-item="2" data-prop="basis" min="50" max="300" step="10" value="150" class="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 Controls -->
+                <div class="bg-white p-4 rounded-lg shadow border-l-8 border-blue-500">
+                    <h3 class="font-bold text-blue-600 mb-3">Item 3 (สีน้ำเงิน)</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-grow</label>
+                                <span id="val-3-grow" class="font-mono bg-slate-100 px-1 rounded">0</span>
+                            </div>
+                            <input type="range" data-item="3" data-prop="grow" min="0" max="5" value="0" class="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-shrink</label>
+                                <span id="val-3-shrink" class="font-mono bg-slate-100 px-1 rounded">1</span>
+                            </div>
+                            <input type="range" data-item="3" data-prop="shrink" min="0" max="5" value="1" class="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <label>flex-basis</label>
+                                <span id="val-3-basis" class="font-mono bg-slate-100 px-1 rounded">150px</span>
+                            </div>
+                            <input type="range" data-item="3" data-prop="basis" min="50" max="300" step="10" value="150" class="w-full h-2 bg-blue-100 rounded-lg appearance-none cursor-pointer slider-thumb">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Display Area (Right Side) -->
+            <div class="lg:col-span-8">
+                
+                <div class="sticky top-4">
+                    <h2 class="text-xl font-bold mb-4">ผลลัพธ์ (Output)</h2>
+                    
+                    <!-- The Flex Container -->
+                    <div class="bg-white p-2 rounded shadow-lg overflow-hidden relative">
+                        <!-- Ruler -->
+                        <div class="h-6 w-full flex text-xs text-gray-400 border-b border-gray-200 mb-1">
+                            <div class="flex-1 border-r border-gray-200"></div>
+                            <div class="flex-1 border-r border-gray-200"></div>
+                            <div class="flex-1 border-r border-gray-200"></div>
+                            <div class="flex-1 border-r border-gray-200"></div>
+                        </div>
+
+                        <!-- Flex Container Wrapper (for width control) -->
+                        <div id="flexContainerWrapper" class="mx-auto transition-all duration-200 ease-out border-x-2 border-dashed border-slate-300" style="width: 800px;">
+                            
+                            <!-- The Actual Flexbox -->
+                            <div class="flex striped-bg min-h-[250px] p-2 gap-1 items-stretch relative">
+                                
+                                <div id="item-1" class="flex-item bg-rose-500" style="flex: 0 1 150px;">
+                                    <div class="flex flex-col items-center">
+                                        <span>Item 1</span>
+                                        <span id="size-1" class="text-xs font-normal opacity-90 mt-1">150px</span>
+                                    </div>
+                                </div>
+
+                                <div id="item-2" class="flex-item bg-emerald-500" style="flex: 0 1 150px;">
+                                    <div class="flex flex-col items-center">
+                                        <span>Item 2</span>
+                                        <span id="size-2" class="text-xs font-normal opacity-90 mt-1">150px</span>
+                                    </div>
+                                </div>
+
+                                <div id="item-3" class="flex-item bg-blue-500" style="flex: 0 1 150px;">
+                                    <div class="flex flex-col items-center">
+                                        <span>Item 3</span>
+                                        <span id="size-3" class="text-xs font-normal opacity-90 mt-1">150px</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="text-center text-xs text-gray-500 mt-1 bg-white">Container Width: <span id="currentContainerWidth">800px</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Code Preview -->
+                    <div class="mt-6 bg-slate-900 text-slate-200 p-4 rounded-lg font-mono text-sm shadow-inner overflow-x-auto">
+                        <div class="text-gray-500 mb-2">// CSS Code</div>
+                        <div class="mb-2"><span class="text-purple-400">.container</span> { <span class="text-sky-300">display</span>: flex; }</div>
+                        
+                        <div class="pl-4 border-l-2 border-rose-500 mb-1">
+                            <span class="text-rose-400">.item-1</span> { flex: <span id="code-1" class="text-yellow-300">0 1 150px</span>; }
+                        </div>
+                        <div class="pl-4 border-l-2 border-emerald-500 mb-1">
+                            <span class="text-emerald-400">.item-2</span> { flex: <span id="code-2" class="text-yellow-300">0 1 150px</span>; }
+                        </div>
+                        <div class="pl-4 border-l-2 border-blue-500">
+                            <span class="text-blue-400">.item-3</span> { flex: <span id="code-3" class="text-yellow-300">0 1 150px</span>; }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 border-t pt-8">
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 hover:shadow-md transition">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg font-mono font-bold">flex-grow</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">อัตราการขยายตัว</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    กำหนดว่า Item จะ "โต" ขึ้นเท่าไหร่เมื่อมีที่ว่างเหลือใน Container
+                </p>
+                <ul class="mt-3 text-sm text-gray-500 list-disc list-inside">
+                    <li><strong class="text-black">0 (Default):</strong> ไม่ขยายตัวตามที่ว่าง</li>
+                    <li><strong class="text-black">ตัวเลข > 0:</strong> ขยายตัวเพื่อแย่งพื้นที่ว่าง (เช่น ถ้าทุกตัวเป็น 1 จะแบ่งพื้นที่เท่ากัน)</li>
+                </ul>
+                <div class="mt-4 text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-200">
+                    💡 <strong>ลองทำ:</strong> เพิ่มความกว้าง Container ให้สุด แล้วปรับ grow ของ Item 1 เป็น 1 แล้วลองปรับ Item 2 เป็น 2
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 hover:shadow-md transition">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg font-mono font-bold">flex-shrink</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">อัตราการหดตัว</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    กำหนดว่า Item จะ "ยอมหด" ลงแค่ไหนเมื่อพื้นที่ใน Container ไม่พอ
+                </p>
+                <ul class="mt-3 text-sm text-gray-500 list-disc list-inside">
+                    <li><strong class="text-black">1 (Default):</strong> ยอมหดตัวเท่าๆ กัน</li>
+                    <li><strong class="text-black">0:</strong> ไม่ยอมหดตัวเลย (จะล้นออกไป)</li>
+                    <li><strong class="text-black">ตัวเลขสูง:</strong> ยิ่งเลขเยอะ ยิ่งยอมหดเยอะกว่าเพื่อน</li>
+                </ul>
+                <div class="mt-4 text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-200">
+                    💡 <strong>ลองทำ:</strong> ลดความกว้าง Container ให้น้อยที่สุด แล้วตั้ง shrink ของ Item 1 เป็น 0 (ไม่ยอมหด) ส่วน Item อื่นเป็น 1
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-100 hover:shadow-md transition">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-indigo-100 text-indigo-700 p-2 rounded-lg font-mono font-bold">flex-basis</span>
+                </div>
+                <h3 class="font-bold text-lg mb-2">ขนาดตั้งต้น</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    ขนาดเริ่มต้นของ Item ก่อนที่ flex-grow หรือ flex-shrink จะทำงาน
+                </p>
+                <ul class="mt-3 text-sm text-gray-500 list-disc list-inside">
+                    <li><strong class="text-black">Auto (Default):</strong> เท่ากับขนาด content หรือ width ที่กำหนด</li>
+                    <li><strong class="text-black">px, %, rem:</strong> กำหนดขนาดตายตัว</li>
+                </ul>
+                <div class="mt-4 text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-200">
+                    💡 <strong>ข้อสังเกต:</strong> มันคือค่าอุดมคติ ถ้าที่พอก็จะได้เท่านี้ ถ้าที่ไม่พอต้องดู shrink ถ้าที่เหลือต้องดู grow
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // State management
+        const state = {
+            1: { grow: 0, shrink: 1, basis: 150 },
+            2: { grow: 0, shrink: 1, basis: 150 },
+            3: { grow: 0, shrink: 1, basis: 150 }
+        };
+
+        // DOM Elements
+        const containerWidthInput = document.getElementById('containerWidth');
+        const containerWrapper = document.getElementById('flexContainerWrapper');
+        const containerWidthDisplay = document.getElementById('containerWidthDisplay');
+        const currentContainerWidth = document.getElementById('currentContainerWidth');
+        const inputs = document.querySelectorAll('input[type="range"][data-item]');
+
+        // Initialize Display
+        function updateDisplay() {
+            // Update Container Width
+            const width = containerWidthInput.value;
+            containerWrapper.style.width = width + 'px';
+            containerWidthDisplay.textContent = width + 'px';
+            currentContainerWidth.textContent = width + 'px';
+
+            // Update Items
+            for (let i = 1; i <= 3; i++) {
+                const itemData = state[i];
+                const element = document.getElementById(`item-${i}`);
+                
+                // Construct Flex Shorthand: flex-grow flex-shrink flex-basis
+                const flexValue = `${itemData.grow} ${itemData.shrink} ${itemData.basis}px`;
+                
+                // Apply Style
+                element.style.flex = flexValue;
+
+                // Update Input Displays
+                document.getElementById(`val-${i}-grow`).textContent = itemData.grow;
+                document.getElementById(`val-${i}-shrink`).textContent = itemData.shrink;
+                document.getElementById(`val-${i}-basis`).textContent = itemData.basis + 'px';
+
+                // Update Code Preview
+                document.getElementById(`code-${i}`).textContent = flexValue;
+
+                // Update Real-time Width Display inside the box
+                // We use requestAnimationFrame to ensure the layout has updated
+                requestAnimationFrame(() => {
+                    const rect = element.getBoundingClientRect();
+                    document.getElementById(`size-${i}`).textContent = Math.round(rect.width) + 'px';
+                });
+            }
+        }
+
+        // Event Listeners for Item Controls
+        inputs.forEach(input => {
+            input.addEventListener('input', (e) => {
+                const item = e.target.dataset.item;
+                const prop = e.target.dataset.prop;
+                state[item][prop] = e.target.value;
+                updateDisplay();
+            });
+        });
+
+        // Event Listener for Container Width
+        containerWidthInput.addEventListener('input', updateDisplay);
+
+        // Resize observer to update width text if window resizes (responsive check)
+        new ResizeObserver(() => {
+            // Check current computed width of items
+             for (let i = 1; i <= 3; i++) {
+                const element = document.getElementById(`item-${i}`);
+                if(element) {
+                    const rect = element.getBoundingClientRect();
+                    document.getElementById(`size-${i}`).textContent = Math.round(rect.width) + 'px';
+                }
+             }
+        }).observe(containerWrapper);
+
+        // Initial Run
+        updateDisplay();
+
+    </script>
+</body>
+</html>
