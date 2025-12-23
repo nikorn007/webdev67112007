@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการรถยนต์แนะนำ (Flexbox & Position)</title>
+    <style>
+        /* --- ตั้งค่าพื้นฐาน (Reset & Base Styles) --- */
+        * {
+            box-sizing: border-box;
+            /* สำคัญ: รวม padding/border ในขนาด width/height */
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', sans-serif;
+            /* แนะนำให้ใช้ฟอนต์ไทยสวยๆ */
+        }
+
+        body {
+            background-color: #f4f4f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        /* --- ส่วนสำคัญ: FLEXBOX CONTAINER --- */
+        .car-container {
+            display: flex;
+            /* กำหนดให้เป็น Flexbox */
+            flex-wrap: wrap;
+            /* อนุญาตให้รายการตกบรรทัดเมื่อพื้นที่ไม่พอ */
+            justify-content: center;
+            /* จัดกึ่งกลางแนวนอน */
+            gap: 20px;
+            /* ระยะห่างระหว่าง Card */
+            max-width: 1200px;
+            margin: 0 auto;
+            /* จัด Container ให้อยู่กลางหน้าจอ */
+        }
+
+        /* --- ส่วนสำคัญ: FLEXBOX ITEM (CARD) --- */
+        .car-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            /* เงาตกกระทบ */
+            overflow: hidden;
+            /* ตัดส่วนเกินที่ล้นขอบโค้งออก */
+
+            /* กำหนดขนาดของ Item */
+            flex: 1 1 250px;
+            /* grow=1, shrink=1, basis=250px */
+            /* ความหมาย: ยืดขยายได้, หดได้, ขนาดเริ่มต้นประมาณ 250px */
+
+            max-width: 300px;
+            /* จำกัดความกว้างไม่ให้ใหญ่เกินไป */
+            transition: transform 0.3s;
+            /* เอฟเฟกต์ตอนชี้เมาส์ */
+        }
+
+        .car-card:hover {
+            transform: translateY(-5px);
+            /* ขยับขึ้นเล็กน้อยเมื่อเอาเมาส์ชี้ */
+        }
+
+        /* --- ส่วนสำคัญ: POSITION (Relative & Absolute) --- */
+        .card-image-wrapper {
+            position: relative;
+            /* แม่: เป็นจุดอ้างอิงให้ลูก (Badge) */
+            height: 180px;
+            background-color: #ddd;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* ให้รูปเต็มพื้นที่โดยสัดส่วนไม่เพี้ยน */
+        }
+
+        .badge {
+            position: absolute;
+            /* ลูก: ลอยอยู่เหนือรูปภาพ */
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* คลาสแยกสีสำหรับ Badge */
+        .bg-red {
+            background-color: #e74c3c;
+        }
+
+        .bg-green {
+            background-color: #27ae60;
+        }
+
+        .bg-blue {
+            background-color: #3498db;
+        }
+
+        .bg-orange {
+            background-color: #e67e22;
+        }
+
+        /* --- ส่วนรายละเอียดเนื้อหา --- */
+        .card-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .car-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .car-model {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .car-price {
+            color: #e74c3c;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .btn-detail {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background-color: #34495e;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-detail:hover {
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>โชว์รูมรถยนต์ (Flexbox & Position Demo)</h1>
+
+    <div class="car-container">
+        <!-- Card 1 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-red">ขายดีที่สุด</span>
+                <img src="https://placehold.co/300x200/2c3e50/FFF?text=Toyota+Camry" alt="Toyota Camry">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Toyota</div>
+                <div class="car-model">Camry 2.5 Hybrid</div>
+                <div class="car-price">1,659,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-green">ประหยัดน้ำมัน</span>
+                <img src="https://placehold.co/300x200/c0392b/FFF?text=Honda+Civic" alt="Honda Civic">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Honda</div>
+                <div class="car-model">Civic e:HEV RS</div>
+                <div class="car-price">1,259,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-blue">รถไฟฟ้า 100%</span>
+                <img src="https://placehold.co/300x200/2980b9/FFF?text=BYD+Seal" alt="BYD Seal">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">BYD</div>
+                <div class="car-model">Seal Performance</div>
+                <div class="car-price">1,599,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-orange">แนะนำ</span>
+                <img src="https://placehold.co/300x200/f39c12/FFF?text=Isuzu+D-Max" alt="Isuzu D-Max">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Isuzu</div>
+                <div class="car-model">D-Max V-Cross 4x4</div>
+                <div class="car-price">1,157,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-blue">รถไฟฟ้า 100%</span>
+                <img src="https://placehold.co/300x200/8e44ad/FFF?text=Tesla+Model+3" alt="Tesla Model 3">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Tesla</div>
+                <div class="car-model">Model 3 Highland</div>
+                <div class="car-price">1,599,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-green">มือสองสภาพดี</span>
+                <img src="https://placehold.co/300x200/16a085/FFF?text=Mazda+CX-5" alt="Mazda CX-5">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Mazda</div>
+                <div class="car-model">CX-5 2.0 SP</div>
+                <div class="car-price">890,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 7 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-red">มาใหม่</span>
+                <img src="https://placehold.co/300x200/d35400/FFF?text=Ford+Raptor" alt="Ford Ranger Raptor">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Ford</div>
+                <div class="car-model">Ranger Raptor V6</div>
+                <div class="car-price">1,919,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+
+        <!-- Card 8 -->
+        <article class="car-card">
+            <div class="card-image-wrapper">
+                <span class="badge bg-orange">โปรโมชั่น</span>
+                <img src="https://placehold.co/300x200/7f8c8d/FFF?text=Nissan+Kicks" alt="Nissan Kicks">
+            </div>
+            <div class="card-content">
+                <div class="car-brand">Nissan</div>
+                <div class="car-model">Kicks e-POWER</div>
+                <div class="car-price">799,000 บาท</div>
+                <a href="#" class="btn-detail">ดูรายละเอียด</a>
+            </div>
+        </article>
+    </div>
+
+</body>
+
+</html>

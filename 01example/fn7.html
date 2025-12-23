@@ -1,0 +1,87 @@
+<!-- ข้อ 7: Flexbox 3 กล่อง -->
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flexbox Layout</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f0f0f0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .box {
+            width: 150px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .box1 {
+            background: #ff6b6b;
+        }
+
+        .box2 {
+            background: #4ecdc4;
+        }
+
+        .box3 {
+            background: #45b7d1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="box box1">Box 1</div>
+        <div class="box box2">Box 2</div>
+        <div class="box box3">Box 3</div>
+    </div>
+
+    <form action="#" method="POST">
+        <label for="std_id">รหัสนักศึกษา:</label>
+        <input type="text" id="std_id" name="std_id" placeholder="เช่น 6601xxxx" required>
+
+        <input type="email" name="email" placeholder="อีเมลมหาวิทยาลัย">
+
+        <br><br>
+        <span>ชั้นปี:</span>
+        <input type="radio" name="year_level" value="1"> ปี 1
+        <input type="radio" name="year_level" value="2"> ปี 2
+        <input type="radio" name="year_level" value="3"> ปี 3
+        <input type="radio" name="year_level" value="4"> ปี 4
+
+        <br><br>
+        <span>เอกสารที่แนบ:</span>
+        <input type="checkbox" name="docs" value="transcript"> ทรานสคริปต์
+        <input type="checkbox" name="docs" value="photo"> รูปถ่าย
+
+        <br><br>
+        <label for="faculty">คณะ:</label>
+        <select name="faculty" id="faculty">
+            <option value="sci">วิทยาศาสตร์</option>
+            <option value="eng">วิศวกรรมศาสตร์</option>
+            <option value="it">เทคโนโลยีสารสนเทศ</option>
+            <option value="edu">ครุศาสตร์</option>
+        </select>
+
+        <br><br>
+        <label for="address">ที่อยู่ปัจจุบัน:</label>
+        <br>
+        <textarea name="address" rows="4" cols="50"></textarea>
+
+        <br><br>
+        <button type="submit">บันทึกข้อมูล</button>
+    </form>
+</body>
+
+</html>

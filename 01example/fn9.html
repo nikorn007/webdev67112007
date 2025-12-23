@@ -1,0 +1,42 @@
+<!-- ข้อ 9: Responsive 2 คอลัมน์ -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Layout</title>
+    <style>
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .box {
+            flex: 1;
+            background: #ff6b6b;
+            padding: 30px;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .box:nth-child(2) {
+            background: #4ecdc4;
+        }
+        
+        /* Media Query สำหรับหน้าจอเล็ก */
+        @media (max-width: 767px) {
+            .container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">กล่องที่ 1</div>
+        <div class="box">กล่องที่ 2</div>
+    </div>
+</body>
+</html>

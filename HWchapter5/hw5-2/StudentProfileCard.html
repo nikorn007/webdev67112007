@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Cards Flexbox Exercise</title>
+    <!-- นำเข้าฟอนต์ภาษาไทยสวยๆ -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ตั้งค่าพื้นฐาน */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        /* --- ส่วนที่ 3: Flexbox Container (โจทย์ข้อสุดท้าย) --- */
+        /* คลาสสำหรับคลุม Card ทั้งหมดเพื่อจัดเรียง */
+        .card-container {
+            display: flex;
+            /* เปิดใช้งาน Flexbox */
+            flex-wrap: wrap;
+            /* ให้ปัดลงบรรทัดใหม่ถ้าพื้นที่ไม่พอ */
+            gap: 20px;
+            /* ระยะห่างระหว่าง Card */
+            justify-content: center;
+            /* จัดให้อยู่กึ่งกลางหน้าจอ (ลองเปลี่ยนเป็น flex-start ได้) */
+        }
+
+        /* --- ส่วนที่ 1: Student Card Design (โจทย์ข้อแรก) --- */
+        .student-card {
+            background-color: white;
+            width: 280px;
+            /* กำหนดความกว้างของ Card */
+            border-radius: 12px;
+            /* ทำมุมโค้ง */
+            overflow: hidden;
+            /* ป้องกันภาพล้นมุมโค้ง */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            /* เงาให้ดูมีมิติ */
+            transition: transform 0.2s;
+
+            /* ต้องมี position: relative เพื่อให้ลูกที่เป็น absolute อ้างอิงจากตัวนี้ */
+            position: relative;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            /* ลูกเล่นขยับขึ้นเล็กน้อยเมื่อเอาเมาส์ชี้ */
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            /* ให้ภาพเต็มพื้นที่โดยสัดส่วนไม่เพี้ยน */
+            background-color: #ddd;
+        }
+
+        .card-content {
+            padding: 20px;
+            text-align: center;
+            /* จัดข้อความกึ่งกลาง */
+        }
+
+        .student-name {
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .student-faculty {
+            margin: 0 0 15px 0;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .student-gpa {
+            font-weight: bold;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* --- ส่วนที่ 2: Status Badge (โจทย์ข้อสอง - Position) --- */
+        .status-badge {
+            position: absolute;
+            /* ลอยอิสระเทียบกับพ่อ (student-card) */
+            top: 15px;
+            /* ห่างจากด้านบน 15px */
+            right: 15px;
+            /* ห่างจากด้านขวา 15px */
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        /* แยกสีตามเงื่อนไขเกรด */
+        /* เกรด >= 2.00 : ปกติ (สีเขียว) */
+        .status-normal {
+            background-color: #2ecc71;
+        }
+
+        /* เกรด < 2.00 : วิทยาทัณฑ์ (สีส้ม/เหลืองเข้ม) */
+        .status-probation {
+            background-color: #f39c12;
+        }
+
+        /* เกรด < 1.50 : พ้นสภาพ (สีแดง) */
+        .status-retired {
+            background-color: #e74c3c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>รายชื่อนักศึกษา (Student Lists)</h1>
+
+    <!-- Container สำหรับ Flexbox -->
+    <div class="card-container">
+
+        <!-- Card ใบที่ 1: สถานะปกติ (GPA 3.50) -->
+        <div class="student-card">
+            <!-- ป้ายสถานะ (Absolute Position) -->
+            <span class="status-badge status-normal">ปกติ</span>
+
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                alt="Student Photo" class="card-image">
+            <div class="card-content">
+                <h3 class="student-name">นายสมชาย ใจดี</h3>
+                <p class="student-faculty">คณะวิศวกรรมศาสตร์</p>
+                <div class="student-gpa">GPA: 3.50</div>
+            </div>
+        </div>
+
+        <!-- Card ใบที่ 2: สถานะวิทยาทัณฑ์ (GPA 1.85) -->
+        <div class="student-card">
+            <span class="status-badge status-probation">วิทยาทัณฑ์</span>
+
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                alt="Student Photo" class="card-image">
+            <div class="card-content">
+                <h3 class="student-name">นางสาวสมหญิง จริงใจ</h3>
+                <p class="student-faculty">คณะบริหารธุรกิจ</p>
+                <div class="student-gpa">GPA: 1.85</div>
+            </div>
+        </div>
+
+        <!-- Card ใบที่ 3: สถานะพ้นสภาพ (GPA 1.20) -->
+        <div class="student-card">
+            <span class="status-badge status-retired">พ้นสภาพ</span>
+
+            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                alt="Student Photo" class="card-image">
+            <div class="card-content">
+                <h3 class="student-name">นายเอกพล คนขยัน</h3>
+                <p class="student-faculty">คณะวิทยาศาสตร์</p>
+                <div class="student-gpa">GPA: 1.20</div>
+            </div>
+        </div>
+
+        <!-- Card ใบที่ 4: สถานะปกติ (GPA 2.75) -->
+        <div class="student-card">
+            <span class="status-badge status-normal">ปกติ</span>
+
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                alt="Student Photo" class="card-image">
+            <div class="card-content">
+                <h3 class="student-name">นางสาววิไล ไวยากรณ์</h3>
+                <p class="student-faculty">คณะศิลปศาสตร์</p>
+                <div class="student-gpa">GPA: 2.75</div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

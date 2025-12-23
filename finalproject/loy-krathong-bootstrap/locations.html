@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สถานที่ลอยกระทง - เทศกาลลอยกระทง</title>
+
+    <!-- Google Fonts - Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-flower1 me-2"></i>ลอยกระทง
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-house-door me-1"></i>หน้าแรก
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="history.html">
+                            <i class="bi bi-book me-1"></i>ประวัติ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="how-to-make.html">
+                            <i class="bi bi-tools me-1"></i>วิธีทำกระทง
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="locations.html">
+                            <i class="bi bi-geo-alt me-1"></i>สถานที่
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header bg-danger text-white py-5">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-3">
+                    <li class="breadcrumb-item">
+                        <a href="index.html" class="text-white-50">หน้าแรก</a>
+                    </li>
+                    <li class="breadcrumb-item active text-white">สถานที่ลอยกระทง</li>
+                </ol>
+            </nav>
+            <h1 class="display-4 fw-bold">
+                <i class="bi bi-geo-alt me-3"></i>สถานที่ลอยกระทงยอดนิยม
+            </h1>
+            <p class="lead mb-0">ค้นพบสถานที่จัดงานลอยกระทงที่ดีที่สุดในประเทศไทย</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-5">
+        <div class="container">
+            <!-- Location Cards -->
+            <div class="row g-4">
+                <!-- Location 1: Sukhothai -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow location-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=400&h=250&fit=crop"
+                                class="card-img-top" alt="สุโขทัย">
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-danger">
+                                <i class="bi bi-star-fill me-1"></i>แนะนำ
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-warning text-dark me-2">ภาคเหนือ</span>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> สุโขทัย
+                                </small>
+                            </div>
+                            <h5 class="card-title fw-bold">งานลอยกระทงเผาเทียนเล่นไฟ</h5>
+                            <p class="card-text text-muted">
+                                ต้นกำเนิดของประเพณีลอยกระทง จัดงานยิ่งใหญ่ที่สุดในประเทศไทย
+                                มีการแสดงแสงสีเสียงอลังการที่อุทยานประวัติศาสตร์สุโขทัย
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                </div>
+                                <span class="badge bg-success">5/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location 2: Chiang Mai -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow location-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1573455494060-c5595004fb6c?w=400&h=250&fit=crop"
+                                class="card-img-top" alt="เชียงใหม่">
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-info">
+                                <i class="bi bi-balloon-fill me-1"></i>โคมลอย
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-warning text-dark me-2">ภาคเหนือ</span>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> เชียงใหม่
+                                </small>
+                            </div>
+                            <h5 class="card-title fw-bold">เทศกาลยี่เป็ง</h5>
+                            <p class="card-text text-muted">
+                                ลอยกระทงควบคู่กับการปล่อยโคมลอย
+                                บรรยากาศโรแมนติกริมแม่น้ำปิง
+                                มีขบวนแห่กระทงและการประกวดนางนพมาศ
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-half text-warning"></i>
+                                </div>
+                                <span class="badge bg-success">4.5/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location 3: Tak -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow location-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1602656043820-7be61ef5f442?w=400&h=250&fit=crop"
+                                class="card-img-top" alt="ตาก">
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-warning text-dark">
+                                <i class="bi bi-water me-1"></i>กระทงสาย
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-success me-2">ภาคเหนือตอนล่าง</span>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> ตาก
+                                </small>
+                            </div>
+                            <h5 class="card-title fw-bold">ลอยกระทงสาย</h5>
+                            <p class="card-text text-muted">
+                                ลอยกระทงสายนับหมื่นกระทงไหลลงแม่น้ำปิง
+                                สวยงามเหมือนสายน้ำแห่งแสงเทียน
+                                เอกลักษณ์เฉพาะของจังหวัดตาก
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                </div>
+                                <span class="badge bg-success">4/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location 4: Bangkok -->
+                <div class="col-md-6 col-xl-3">
+                    <div class="card h-100 border-0 shadow location-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=400&h=250&fit=crop"
+                                class="card-img-top" alt="กรุงเทพฯ">
+                            <span class="position-absolute top-0 end-0 m-2 badge bg-primary">
+                                <i class="bi bi-building me-1"></i>เมืองหลวง
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="badge bg-primary me-2">ภาคกลาง</span>
+                                <small class="text-muted">
+                                    <i class="bi bi-geo-alt"></i> กรุงเทพฯ
+                                </small>
+                            </div>
+                            <h5 class="card-title fw-bold">ลอยกระทงในเมืองหลวง</h5>
+                            <p class="card-text text-muted">
+                                ลอยกระทงได้ตามสวนสาธารณะ วัด และริมแม่น้ำเจ้าพระยา
+                                เข้าถึงง่าย สะดวกสบาย มีหลายจุดให้เลือก
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    <i class="bi bi-star text-warning"></i>
+                                </div>
+                                <span class="badge bg-success">4/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="card border-0 shadow-sm mt-5">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-table me-2"></i>เปรียบเทียบสถานที่
+                    </h4>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>สถานที่</th>
+                                    <th>ไฮไลท์</th>
+                                    <th>ความหนาแน่น</th>
+                                    <th>เหมาะกับ</th>
+                                    <th class="text-center">คะแนน</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">สุโขทัย</td>
+                                    <td>แสงสีเสียง, ประวัติศาสตร์</td>
+                                    <td><span class="badge bg-danger">สูงมาก</span></td>
+                                    <td>ทุกกลุ่ม</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success">5/5</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">เชียงใหม่</td>
+                                    <td>โคมลอย, ขบวนแห่</td>
+                                    <td><span class="badge bg-warning text-dark">สูง</span></td>
+                                    <td>คู่รัก, ครอบครัว</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success">4.5/5</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">ตาก</td>
+                                    <td>กระทงสาย, เอกลักษณ์</td>
+                                    <td><span class="badge bg-info">ปานกลาง</span></td>
+                                    <td>นักท่องเที่ยว</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success">4/5</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">กรุงเทพฯ</td>
+                                    <td>สะดวก, หลายจุด</td>
+                                    <td><span class="badge bg-secondary">แล้วแต่จุด</span></td>
+                                    <td>ทุกกลุ่ม</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-success">4/5</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Tips -->
+            <div class="alert alert-info mt-5 border-0 shadow-sm" role="alert">
+                <h5 class="alert-heading">
+                    <i class="bi bi-shield-check me-2"></i>คำแนะนำเพื่อความปลอดภัย
+                </h5>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="mb-md-0">
+                            <li>ลอยกระทงในจุดที่จัดไว้และมีเจ้าหน้าที่ดูแล</li>
+                            <li>ระวังเด็กเล็กใกล้แหล่งน้ำ</li>
+                            <li>ไม่ดื่มแอลกอฮอล์ก่อนลงน้ำ</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="mb-0">
+                            <li>ใช้กระทงจากวัสดุธรรมชาติ</li>
+                            <li>ไม่ปล่อยโคมลอยในพื้นที่ห้าม</li>
+                            <li>ดูแลสัมภาระให้ดี</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <h5 class="fw-bold">
+                        <i class="bi bi-flower1 me-2"></i>เทศกาลลอยกระทง
+                    </h5>
+                    <p class="text-muted mb-0">เว็บไซต์เพื่อการศึกษาศิลปวัฒนธรรมไทย</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-1">จัดทำโดย: [ชื่อ-นามสกุล]</p>
+                    <p class="text-muted mb-0">รหัสนักศึกษา: [รหัส] | <i class="bi bi-c-circle"></i> 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

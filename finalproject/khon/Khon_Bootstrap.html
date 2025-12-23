@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เปิดตำนานโขน - Bootstrap Version</title>
+
+    <!-- 1. Import Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 2. Import Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&family=Sarabun:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* Custom Styles to Override/Augment Bootstrap */
+        :root {
+            --thai-red: #800000;
+            --thai-gold: #c5a009;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            padding-top: 70px;
+            /* Space for fixed navbar */
+            background-color: #fcfcfc;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .navbar-brand,
+        .btn {
+            font-family: 'Prompt', sans-serif;
+        }
+
+        /* Custom Colors based on Thai Tone */
+        .bg-thai-red {
+            background-color: var(--thai-red) !important;
+        }
+
+        .text-thai-red {
+            color: var(--thai-red) !important;
+        }
+
+        .btn-thai-gold {
+            background-color: var(--thai-gold);
+            color: white;
+            border: none;
+        }
+
+        .btn-thai-gold:hover {
+            background-color: #a08000;
+            color: white;
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1599309664687-b956a6202422?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .card {
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--thai-red);
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-thai-red fixed-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#"><i class="fas fa-mask me-2"></i>เปิดตำนานโขน</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#home">หน้าหลัก</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#history">ประวัติ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#characters">ตัวละคร</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">แกลเลอรี่</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-3 fw-bold mb-3">ศิลปะการแสดงชั้นสูง</h1>
+            <p class="lead mb-4">มรดกภูมิปัญญาทางวัฒนธรรมของมนุษยชาติ (UNESCO)</p>
+            <a href="#history" class="btn btn-thai-gold btn-lg px-4 py-2 rounded-pill">เรียนรู้เพิ่มเติม</a>
+        </div>
+    </section>
+
+    <!-- History Section (Grid System: Image Left, Text Right) -->
+    <section id="history" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="text-thai-red fw-bold">ประวัติความเป็นมา</h2>
+                <div class="d-flex justify-content-center">
+                    <div style="width: 60px; height: 3px; background-color: #c5a009;"></div>
+                </div>
+            </div>
+
+            <div class="row align-items-center g-5">
+                <div class="col-md-6">
+                    <img src="https://image.tnews.co.th/newscenter/images/userfiles/images/khon(1).jpg"
+                        class="img-fluid rounded shadow-lg" alt="Khon Performance">
+                </div>
+                <div class="col-md-6">
+                    <h3 class="mb-3">รากเหง้าแห่งวัฒนธรรม</h3>
+                    <p class="text-muted">
+                        โขน เป็นศิลปะการแสดงชั้นสูงของไทยที่มีความสง่างาม อลังการ และประณีต
+                        เป็นการผสมผสานศิลปะหลายแขนงเข้าด้วยกัน ทั้งดนตรี วรรณกรรม และหัตถศิลป์
+                        พัฒนามาจากการแสดงชักนาคดึกดำบรรพ์ กระบี่กระบอง และหนังใหญ่
+                    </p>
+                    <p class="text-muted">
+                        เรื่องราวที่นิยมนำมาแสดงคือ "รามเกียรติ์" ซึ่งแฝงไปด้วยคติธรรมสอนใจ
+                        ผู้แสดงจะต้องสวมหัวโขนปิดหน้า (ยกเว้นตัวพระ ตัวนาง และเทวดา ในบางยุคสมัย)
+                        และแสดงอารมณ์ผ่านลีลาท่ารำอันวิจิตร
+                    </p>
+                    <button class="btn btn-outline-danger mt-3">อ่านตำนานฉบับเต็ม</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section (Cards) -->
+    <section id="characters" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="text-thai-red fw-bold">ตัวละครหลัก</h2>
+                <p class="text-muted">บทบาทสำคัญในการดำเนินเรื่องรามเกียรติ์</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Card 1: Phra -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon">
+                            <img src="https://i.pinimg.com/originals/1a/2c/c3/1a2cc3641ecea5bac3a2203210755980.gif"
+                                class="img-fluid rounded shadow-lg" alt="Khon Performance">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">ตัวพระ</h5>
+                            <p class="card-text small text-muted">ผู้ชายหรือเทวดา ท่าทางผึ่งผาย สง่างาม เช่น พระราม</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Nang -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon">
+                            <img src="https://i.pinimg.com/736x/fe/85/df/fe85df2d32cc033cf4b75f317e8818b4.jpg"
+                                class="img-fluid rounded shadow-lg" alt="Khon Performance">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">ตัวนาง</h5>
+                            <p class="card-text small text-muted">ผู้หญิงหรือนางฟ้า ท่าทางอ่อนช้อย นุ่มนวล เช่น นางสีดา
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Yak -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon">
+                            <img src="https://th.bing.com/th/id/R.23728a67502cef005781185e3b308113?rik=QOdxTs%2bMMr%2b9cQ&pid=ImgRaw&r=0"
+                                class="img-fluid rounded shadow-lg" alt="Khon Performance">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">ตัวยักษ์</h5>
+                            <p class="card-text small text-muted">แข็งแรง ดุดัน ใช้ลีลาท่าทางที่หนักแน่น เช่น ทศกัณฐ์
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Ling -->
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card h-100 text-center p-4">
+                        <div class="feature-icon">
+                            <img src="https://thumbs.dreamstime.com/b/king-monkeys-ramayana-hanuman-45644789.jpg"
+                                class="img-fluid rounded shadow-lg" alt="Khon Performance">
+
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">ตัวลิง</h5>
+                            <p class="card-text small text-muted">ว่องไว ขี้เล่น และซุกซน ตีลังกาคล่องแคล่ว เช่น หนุมาน
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery / Accordion Section -->
+    <section id="gallery" class="py-5">
+        <div class="container">
+            <h2 class="text-center text-thai-red fw-bold mb-5">ประเภทของโขน</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Bootstrap Accordion -->
+                    <div class="accordion" id="khonAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne">
+                                    1. โขนกลางแปลง
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show"
+                                data-bs-parent="#khonAccordion">
+                                <div class="accordion-body">
+                                    เป็นการแสดงโขนบนพื้นดินกลางสนาม ไม่มีการสร้างโรงแสดง ใช้ภูมิประเทศและธรรมชาติเป็นฉาก
+                                    นิยมแสดงตอนยกทัพรบกัน
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    2. โขนโรงใน
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#khonAccordion">
+                                <div class="accordion-body">
+                                    เป็นโขนที่มีโรงสำหรับแสดง มีการนำศิลปะของละครในเข้ามาผสมผสาน มีทั้งบทพากย์ เจรจา
+                                    และเพลงร้อง
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                    3. โขนฉาก
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#khonAccordion">
+                                <div class="accordion-body">
+                                    เกิดขึ้นในสมัยรัชกาลที่ 5 มีการสร้างฉากประกอบการแสดงให้สมจริงตามท้องเรื่อง
+                                    และเปลี่ยนฉากไปตามเหตุการณ์
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <div class="mb-3">
+                <a href="#" class="text-white mx-2"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-instagram fa-lg"></i></a>
+            </div>
+            <p class="mb-0">&copy; 2025 โครงการศึกษา Bootstrap 5 เพื่อสืบสานวัฒนธรรมไทย</p>
+            <small class="text-muted">Designed by Students</small>
+        </div>
+    </footer>
+
+    <!-- 3. Import Bootstrap 5 JS Bundle (Includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

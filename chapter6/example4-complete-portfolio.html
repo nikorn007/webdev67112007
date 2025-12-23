@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตัวอย่างที่ 4: Responsive Portfolio Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        .navbar {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 70px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,144C960,149,1056,139,1152,122.7C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 400;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.4s backwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.6s backwards;
+        }
+
+        .hero-image {
+            text-align: center;
+            animation: fadeIn 1s ease 0.8s backwards;
+        }
+
+        .profile-circle {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            font-size: 8rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* ============================================
+           SECTIONS
+           ============================================ */
+        .section {
+            padding: 60px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .about-image-circle {
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: var(--shadow);
+            font-size: 10rem;
+        }
+
+        .about-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .skills {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .skill-item {
+            background: var(--bg-light);
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+        }
+
+        .skill-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        /* Services/Skills Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .service-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .portfolio-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .portfolio-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .portfolio-content {
+            padding: 25px;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .portfolio-content p {
+            color: var(--text-light);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ============================================
+           MOBILE STYLES (Default)
+           ============================================ */
+        @media (max-width: 767px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                transition: left 0.3s ease;
+                box-shadow: var(--shadow);
+                gap: 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .nav-link {
+                padding: 15px 20px;
+                display: block;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .profile-circle {
+                width: 200px;
+                height: 200px;
+                font-size: 6rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ============================================
+           TABLET (768px and up)
+           ============================================ */
+        @media (min-width: 768px) {
+            .hero {
+                padding: 80px 20px;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .skills {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ============================================
+           DESKTOP (1024px and up)
+           ============================================ */
+        @media (min-width: 1024px) {
+            .hero {
+                padding: 100px 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .portfolio-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .portfolio-image {
+                height: 250px;
+            }
+        }
+
+        /* ============================================
+           LARGE DESKTOP (1440px and up)
+           ============================================ */
+        @media (min-width: 1440px) {
+            .hero-content h1 {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">👨‍💻 สมชาย ใจดี</a>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#home" class="nav-link active">หน้าหลัก</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">เกี่ยวกับ</a></li>
+                <li class="nav-item"><a href="#services" class="nav-link">บริการ</a></li>
+                <li class="nav-item"><a href="#portfolio" class="nav-link">ผลงาน</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">ติดต่อ</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="subtitle">สวัสดีครับ! ผมคือ</div>
+                <h1>สมชาย ใจดี</h1>
+                <p>
+                    Full-Stack Web Developer ที่มีประสบการณ์ในการพัฒนาเว็บไซต์และแอปพลิเคชัน 
+                    ด้วยเทคโนโลยีสมัยใหม่ พร้อมมอบประสบการณ์ที่ดีที่สุดให้กับผู้ใช้งาน
+                </p>
+                <div class="hero-buttons">
+                    <a href="#portfolio" class="btn btn-primary">ดูผลงาน</a>
+                    <a href="#contact" class="btn btn-secondary">ติดต่อเรา</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-circle">👨‍💻</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title">เกี่ยวกับผม</h2>
+        <p class="section-subtitle">ประสบการณ์และความเชี่ยวชาญ</p>
+        
+        <div class="about-grid">
+            <div class="about-image">
+                <div class="about-image-circle">💼</div>
+            </div>
+            <div class="about-content">
+                <h3>Full-Stack Developer มากประสบการณ์ 5+ ปี</h3>
+                <p>
+                    ผมเป็น Web Developer ที่มีความหลงใหลในการสร้างสรรค์เว็บไซต์และแอปพลิเคชัน 
+                    ที่มีประสิทธิภาพสูงและใช้งานง่าย ด้วยประสบการณ์กว่า 5 ปี 
+                    ผมได้พัฒนาโปรเจกต์ที่หลากหลายทั้งในประเทศและต่างประเทศ
+                </p>
+                <p>
+                    ผมมุ่งเน้นการเขียนโค้ดที่สะอาด มีโครงสร้างดี และง่ายต่อการดูแลรักษา 
+                    พร้อมทั้งให้ความสำคัญกับ User Experience และ Performance
+                </p>
+                
+                <div class="skills">
+                    <div class="skill-item">
+                        <div class="skill-icon">💻</div>
+                        <div class="skill-info">
+                            <h4>Frontend Development</h4>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">⚙️</div>
+                        <div class="skill-info">
+                            <h4>Backend Development</h4>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">📱</div>
+                        <div class="skill-info">
+                            <h4>Responsive Design</h4>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-icon">🎨</div>
+                        <div class="skill-info">
+                            <h4>UI/UX Design</h4>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services" style="background: var(--bg-light);">
+        <h2 class="section-title">บริการของเรา</h2>
+        <p class="section-subtitle">สิ่งที่เราสามารถช่วยคุณได้</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🌐</div>
+                <h3>Web Development</h3>
+                <p>
+                    พัฒนาเว็บไซต์ที่มีประสิทธิภาพสูง รองรับการใช้งานบนทุกอุปกรณ์ 
+                    ด้วยเทคโนโลยีที่ทันสมัย
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Responsive Design</h3>
+                <p>
+                    ออกแบบเว็บไซต์ให้แสดงผลได้สมบูรณ์แบบบนทุกขนาดหน้าจอ 
+                    จาก Mobile ถึง Desktop
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>UI/UX Design</h3>
+                <p>
+                    ออกแบบ Interface ที่สวยงามและใช้งานง่าย 
+                    เพิ่มประสบการณ์ที่ดีให้กับผู้ใช้งาน
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">⚙️</div>
+                <h3>Backend Development</h3>
+                <p>
+                    พัฒนาระบบ Backend ที่มั่นคงปลอดภัย 
+                    รองรับการทำงานที่มีประสิทธิภาพสูง
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>Performance Optimization</h3>
+                <p>
+                    ปรับปรุงประสิทธิภาพเว็บไซต์ให้โหลดเร็วขึ้น 
+                    เพิ่ม SEO และ User Experience
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">🛠️</div>
+                <h3>Maintenance & Support</h3>
+                <p>
+                    ดูแลและอัพเดทเว็บไซต์ให้ทันสมัยอยู่เสมอ 
+                    พร้อมแก้ไขปัญหาอย่างรวดเร็ว
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="section" id="portfolio">
+        <h2 class="section-title">ผลงานของเรา</h2>
+        <p class="section-subtitle">โปรเจกต์ที่เราภูมิใจ</p>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-image">🛍️</div>
+                <div class="portfolio-content">
+                    <h3>E-Commerce Platform</h3>
+                    <p>
+                        ระบบร้านค้าออนไลน์ครบวงจร รองรับการชำระเงินหลายช่องทาง 
+                        พร้อมระบบจัดการสินค้าและคำสั่งซื้อ
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Node.js</span>
+                        <span class="tag">MongoDB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-image">📊</div>
+                <div class="portfolio-content">
+                    <h3>Analytics Dashboard</h3>
+                    <p>
+                        Dashboard แสดงผลข้อมูลแบบ Real-time 
+                        พร้อมกราฟและตารางที่สวยงาม ใช้งานง่าย
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Chart.js</span>
+                        <span class="tag">API</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-image">📱</div>
+                <div class="portfolio-content">
+                    <h3>Mobile App Landing</h3>
+                    <p>
+                        Landing Page สำหรับแอปพลิเคชันมือถือ 
+                        ดีไซน์สวย Responsive พร้อม Animation
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">HTML5</span>
+                        <span class="tag">CSS3</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-image">🎓</div>
+                <div class="portfolio-content">
+                    <h3>Online Learning Platform</h3>
+                    <p>
+                        แพลตฟอร์มการเรียนรู้ออนไลน์ มีระบบวิดีโอ แบบทดสอบ 
+                        และติดตามความก้าวหน้า
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">Angular</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">Video.js</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-image">🍔</div>
+                <div class="portfolio-content">
+                    <h3>Restaurant Website</h3>
+                    <p>
+                        เว็บไซต์ร้านอาหาร พร้อมเมนู ระบบจองโต๊ะ 
+                        และแสดง Gallery รูปภาพที่สวยงาม
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">WordPress</span>
+                        <span class="tag">PHP</span>
+                        <span class="tag">MySQL</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="portfolio-item">
+                <div class="portfolio-image">💼</div>
+                <div class="portfolio-content">
+                    <h3>Corporate Website</h3>
+                    <p>
+                        เว็บไซต์องค์กร ดีไซน์เป็นมืออาชีพ 
+                        มีระบบ CMS ง่ายต่อการจัดการเนื้อหา
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">Next.js</span>
+                        <span class="tag">Strapi</span>
+                        <span class="tag">Tailwind</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact" style="background: var(--bg-light);">
+        <h2 class="section-title">ติดต่อเรา</h2>
+        <p class="section-subtitle">มีโปรเจกต์ที่น่าสนใจ? มาคุยกันสิ!</p>
+        
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>ข้อมูลติดต่อ</h3>
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>somchai@example.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div>
+                        <h4>โทรศัพท์</h4>
+                        <p>02-XXX-XXXX</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                        <h4>ที่อยู่</h4>
+                        <p>กรุงเทพมหานคร ประเทศไทย</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">⏰</div>
+                    <div>
+                        <h4>เวลาทำการ</h4>
+                        <p>จันทร์ - ศุกร์ 9:00 - 18:00 น.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form>
+                    <div class="form-group">
+                        <label for="name">ชื่อ-นามสกุล</label>
+                        <input type="text" id="name" placeholder="กรอกชื่อของคุณ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">อีเมล</label>
+                        <input type="email" id="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">หัวข้อ</label>
+                        <input type="text" id="subject" placeholder="เรื่องที่ต้องการสอบถาม" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">ข้อความ</label>
+                        <textarea id="message" placeholder="รายละเอียดเพิ่มเติม..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        ส่งข้อความ
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="social-links">
+            <a href="#" class="social-link">📘</a>
+            <a href="#" class="social-link">📷</a>
+            <a href="#" class="social-link">🐦</a>
+            <a href="#" class="social-link">💼</a>
+            <a href="#" class="social-link">📺</a>
+        </div>
+        <p>&copy; 2025 สมชาย ใจดี | Responsive Portfolio Website</p>
+        <p style="opacity: 0.7;">สร้างด้วย ❤️ โดยใช้ HTML5, CSS3 และ JavaScript</p>
+    </footer>
+
+    <script>
+        // Hamburger Menu Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking on links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Active link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            const navbar = document.getElementById('navbar');
+
+            // Add shadow on scroll
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('ขอบคุณสำหรับข้อความของคุณ! เราจะติดต่อกลับโดยเร็วที่สุด');
+            e.target.reset();
+        });
+
+        // Animate skill bars on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.skill-progress').forEach(bar => {
+                        bar.style.width = bar.style.width;
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.skills').forEach(skill => {
+            observer.observe(skill);
+        });
+    </script>
+</body>
+</html>

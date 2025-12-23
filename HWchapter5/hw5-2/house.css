@@ -1,0 +1,123 @@
+/* --- Reset & Base Styles --- */
+* {
+  box-sizing: border-box; /* สำคัญมาก ช่วยให้คำนวณ padding ไม่เกินขนาดกล่อง */
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  padding: 40px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* --- ข้อที่ 3: Layout Container (Flexbox) --- */
+.listing-container {
+  display: flex; /* เปิดใช้งาน Flexbox */
+  flex-wrap: wrap; /* ให้ Card ตกบรรทัดเมื่อพื้นที่ไม่พอ */
+  justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
+  gap: 25px; /* ระยะห่างระหว่าง Card */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- ข้อที่ 1 & 2: Card Design --- */
+.house-card {
+  background-color: white;
+  width: 300px; /* กำหนดความกว้างของ Card */
+  border-radius: 12px; /* มุมมน */
+  overflow: hidden; /* ป้องกันรูปภาพล้นออกนอกมุมมน */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงาให้ดูมีมิติ */
+  transition: transform 0.2s;
+
+  /* [สำคัญสำหรับข้อ 2] กำหนดให้เป็นจุดอ้างอิงของ Badge */
+  position: relative;
+}
+
+.house-card:hover {
+  transform: translateY(-5px); /* ลูกเล่นขยับขึ้นเมื่อเอาเมาส์ชี้ */
+}
+
+/* ส่วนของรูปภาพ */
+.card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* ให้รูปเต็มพื้นที่โดยสัดส่วนไม่เพี้ยน */
+}
+
+/* --- ข้อที่ 2: Badge Position (หัวใจสำคัญ) --- */
+.badge {
+  /* กำหนดตำแหน่งแบบสัมบูรณ์ เทียบกับ .house-card */
+  position: absolute;
+  top: 15px;
+  right: 15px;
+
+  /* ตกแต่ง Badge */
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  z-index: 10;
+}
+
+/* เปลี่ยนสี Badge ตามประเภท (Optional) */
+.badge.detached {
+  background-color: #e74c3c;
+} /* สีแดง */
+.badge.townhome {
+  background-color: #3498db;
+} /* สีฟ้า */
+.badge.condo {
+  background-color: #2ecc71;
+} /* สีเขียว */
+
+/* ส่วนเนื้อหา */
+.card-content {
+  padding: 20px;
+}
+
+.price {
+  font-size: 1.4rem;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.location {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.details {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ไอคอน SVG เล็กๆ เพื่อความสวยงาม */
+.icon {
+  width: 16px;
+  height: 16px;
+  fill: #999;
+}

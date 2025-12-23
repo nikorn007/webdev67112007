@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องมือเรียนรู้ Media Queries แบบ Interactive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .control-panel h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .slider-container {
+            position: relative;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        .current-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        /* Breakpoint Buttons */
+        .breakpoint-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .breakpoint-btn {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .breakpoint-btn:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+            transform: translateY(-2px);
+        }
+
+        .breakpoint-btn.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Preview Box */
+        .preview-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .preview-box h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-container {
+            border: 3px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .preview-header {
+            background: #2d3748;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preview-header .dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .preview-header .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #718096;
+        }
+
+        .preview-header .url {
+            flex: 1;
+            text-align: center;
+            font-size: 0.85rem;
+            background: #4a5568;
+            padding: 5px 15px;
+            border-radius: 5px;
+        }
+
+        .preview-content {
+            padding: 30px;
+            min-height: 400px;
+            background: white;
+        }
+
+        /* Demo Layout */
+        .demo-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-nav {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .demo-nav-item {
+            padding: 10px 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .demo-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .demo-footer {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-panel h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-panel p {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .info-item strong {
+            color: #667eea;
+        }
+
+        /* Code Display */
+        .code-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 25px;
+        }
+
+        .code-box h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .code-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-container .comment {
+            color: #6a9955;
+        }
+
+        .code-container .selector {
+            color: #d7ba7d;
+        }
+
+        .code-container .property {
+            color: #9cdcfe;
+        }
+
+        .code-container .value {
+            color: #ce9178;
+        }
+
+        .code-container .media {
+            color: #c586c0;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 400px 1fr;
+            }
+
+            .header h1 {
+                font-size: 3rem;
+            }
+        }
+
+        /* Tips */
+        .tips {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 25px;
+        }
+
+        .tips h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .tip-item {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .tip-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎨 เครื่องมือเรียนรู้ Media Queries</h1>
+            <p>ปรับขนาดหน้าจอและดูการเปลี่ยนแปลงของ Layout แบบ Real-time</p>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h2>⚙️ ควบคุมขนาดหน้าจอ</h2>
+                
+                <div class="control-group">
+                    <label>ความกว้างหน้าจอ (Viewport Width)</label>
+                    <div class="slider-container">
+                        <input type="range" id="widthSlider" min="320" max="1920" value="1200" step="10">
+                        <div class="value-display">
+                            <span>320px</span>
+                            <span class="current-value" id="currentWidth">1200px</span>
+                            <span>1920px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label>Breakpoints แบบด่วน</label>
+                    <div class="breakpoint-buttons">
+                        <button class="breakpoint-btn" data-width="375">
+                            📱 iPhone<br><small>375px</small>
+                        </button>
+                        <button class="breakpoint-btn" data-width="414">
+                            📱 iPhone Plus<br><small>414px</small>
+                        </button>
+                        <button class="breakpoint-btn" data-width="768">
+                            💻 iPad<br><small>768px</small>
+                        </button>
+                        <button class="breakpoint-btn" data-width="1024">
+                            🖥️ Desktop<br><small>1024px</small>
+                        </button>
+                        <button class="breakpoint-btn" data-width="1440">
+                            🖥️ Large<br><small>1440px</small>
+                        </button>
+                        <button class="breakpoint-btn" data-width="1920">
+                            🖥️ Full HD<br><small>1920px</small>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Panel -->
+                <div class="info-panel">
+                    <h3 id="deviceType">🖥️ Desktop</h3>
+                    <div class="info-item">
+                        <strong>Breakpoint:</strong>
+                        <span id="breakpointInfo">1024px ขึ้นไป</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Layout:</strong>
+                        <span id="layoutInfo">3 คอลัมน์</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Navigation:</strong>
+                        <span id="navInfo">แถบเมนูแนวนอน</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Box -->
+            <div class="preview-box">
+                <h2>👀 แสดงผล (Live Preview)</h2>
+                <div class="preview-container" id="previewContainer">
+                    <div class="preview-header">
+                        <div class="dots">
+                            <div class="dot" style="background: #ff5f57;"></div>
+                            <div class="dot" style="background: #ffbd2e;"></div>
+                            <div class="dot" style="background: #28ca42;"></div>
+                        </div>
+                        <div class="url">https://example.com</div>
+                    </div>
+                    <div class="preview-content" id="previewContent">
+                        <!-- Demo Layout -->
+                        <div class="demo-header">
+                            <h2>🍔 ร้านอาหารอร่อย</h2>
+                            <p>อาหารไทยต้นตำรับ อร่อยทุกคำ</p>
+                        </div>
+
+                        <div class="demo-nav" id="demoNav">
+                            <div class="demo-nav-item">หน้าหลัก</div>
+                            <div class="demo-nav-item">เมนูอาหาร</div>
+                            <div class="demo-nav-item">เกี่ยวกับเรา</div>
+                            <div class="demo-nav-item">ติดต่อ</div>
+                        </div>
+
+                        <div class="demo-grid" id="demoGrid">
+                            <div class="demo-card">🍜 ก๋วยเตี๋ยว<br>฿45</div>
+                            <div class="demo-card">🍛 ข้าวผัด<br>฿50</div>
+                            <div class="demo-card">🥗 ส้มตำ<br>฿40</div>
+                            <div class="demo-card">🍲 ต้มยำกุ้ง<br>฿80</div>
+                            <div class="demo-card">🍖 หมูปิ้ง<br>฿60</div>
+                            <div class="demo-card">🍚 ข้าวผัดกระเพรา<br>฿55</div>
+                        </div>
+
+                        <div class="demo-footer">
+                            <p>&copy; 2025 ร้านอาหารอร่อย</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Display -->
+        <div class="code-box">
+            <h2>💻 โค้ด Media Queries</h2>
+            <div class="code-container" id="codeDisplay">
+                <span class="comment">/* โค้ด CSS จะแสดงตามขนาดหน้าจอที่เลือก */</span>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips">
+            <h2>💡 เคล็ดลับและคำแนะนำ</h2>
+            
+            <div class="tip-item">
+                <strong>1. Mobile-First Approach</strong>
+                เริ่มเขียน CSS สำหรับ Mobile ก่อน (ไม่ต้องใส่ media query) 
+                แล้วใช้ @media (min-width) เพื่อปรับแต่งสำหรับหน้าจอใหญ่ขึ้น
+            </div>
+
+            <div class="tip-item">
+                <strong>2. จำกัดจำนวน Breakpoints</strong>
+                ไม่ควรมี Breakpoints มากเกินไป แนะนำ 3-4 breakpoints หลัก:
+                Mobile (0-767px), Tablet (768-1023px), Desktop (1024px+)
+            </div>
+
+            <div class="tip-item">
+                <strong>3. ใช้ Relative Units</strong>
+                ใช้หน่วย %, em, rem, vw, vh แทน px สำหรับ layout หลัก
+                จะทำให้ responsive ได้ดีกว่า
+            </div>
+
+            <div class="tip-item">
+                <strong>4. ทดสอบบนอุปกรณ์จริง</strong>
+                นอกจาก DevTools แล้ว ควรทดสอบบนมือถือและแท็บเล็ตจริง
+                เพื่อให้มั่นใจว่าใช้งานได้จริง
+            </div>
+
+            <div class="tip-item">
+                <strong>5. พิจารณา Touch Targets</strong>
+                บนหน้าจอสัมผัส ปุ่มและลิงก์ควรมีขนาดอย่างน้อย 44x44px
+                เพื่อให้แตะได้ง่าย
+            </div>
+
+            <div class="tip-item">
+                <strong>6. Viewport Meta Tag</strong>
+                อย่าลืมใส่ <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>
+                ใน &lt;head&gt; เสมอ
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const widthSlider = document.getElementById('widthSlider');
+        const currentWidth = document.getElementById('currentWidth');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewContent = document.getElementById('previewContent');
+        const demoGrid = document.getElementById('demoGrid');
+        const demoNav = document.getElementById('demoNav');
+        const deviceType = document.getElementById('deviceType');
+        const breakpointInfo = document.getElementById('breakpointInfo');
+        const layoutInfo = document.getElementById('layoutInfo');
+        const navInfo = document.getElementById('navInfo');
+        const codeDisplay = document.getElementById('codeDisplay');
+        const breakpointButtons = document.querySelectorAll('.breakpoint-btn');
+
+        function updateLayout(width) {
+            currentWidth.textContent = width + 'px';
+            previewContainer.style.width = width + 'px';
+            previewContainer.style.margin = '0 auto';
+
+            let device, breakpoint, layout, nav, code;
+
+            if (width < 768) {
+                // Mobile
+                device = '📱 Mobile';
+                breakpoint = '0 - 767px';
+                layout = '1 คอลัมน์';
+                nav = 'Hamburger Menu';
+                demoGrid.style.gridTemplateColumns = '1fr';
+                demoNav.style.display = 'none';
+                
+                code = `<span class="comment">/* Mobile (Default) */</span>
+<span class="comment">/* ไม่ต้องใส่ media query สำหรับ mobile */</span>
+
+<span class="selector">.demo-grid</span> {
+    <span class="property">display</span>: <span class="value">grid</span>;
+    <span class="property">grid-template-columns</span>: <span class="value">1fr</span>;
+    <span class="property">gap</span>: <span class="value">15px</span>;
+}
+
+<span class="selector">.demo-nav</span> {
+    <span class="property">display</span>: <span class="value">none</span>; <span class="comment">/* ซ่อนเมนู แสดง Hamburger */</span>
+}`;
+
+            } else if (width < 1024) {
+                // Tablet
+                device = '💻 Tablet';
+                breakpoint = '768px - 1023px';
+                layout = '2 คอลัมน์';
+                nav = 'แถบเมนูแนวนอน';
+                demoGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                demoNav.style.display = 'flex';
+
+                code = `<span class="comment">/* Tablet (768px and up) */</span>
+<span class="media">@media</span> (<span class="property">min-width</span>: <span class="value">768px</span>) {
+    <span class="selector">.demo-grid</span> {
+        <span class="property">grid-template-columns</span>: <span class="value">repeat(2, 1fr)</span>;
+        <span class="property">gap</span>: <span class="value">20px</span>;
+    }
+
+    <span class="selector">.demo-nav</span> {
+        <span class="property">display</span>: <span class="value">flex</span>; <span class="comment">/* แสดงเมนูแนวนอน */</span>
+        <span class="property">gap</span>: <span class="value">10px</span>;
+    }
+
+    <span class="selector">.demo-header h2</span> {
+        <span class="property">font-size</span>: <span class="value">2rem</span>;
+    }
+}`;
+
+            } else {
+                // Desktop
+                device = '🖥️ Desktop';
+                breakpoint = '1024px ขึ้นไป';
+                layout = '3 คอลัมน์';
+                nav = 'แถบเมนูแนวนอน';
+                demoGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+                demoNav.style.display = 'flex';
+
+                code = `<span class="comment">/* Desktop (1024px and up) */</span>
+<span class="media">@media</span> (<span class="property">min-width</span>: <span class="value">1024px</span>) {
+    <span class="selector">.demo-grid</span> {
+        <span class="property">grid-template-columns</span>: <span class="value">repeat(3, 1fr)</span>;
+        <span class="property">gap</span>: <span class="value">25px</span>;
+    }
+
+    <span class="selector">.demo-nav</span> {
+        <span class="property">display</span>: <span class="value">flex</span>;
+        <span class="property">gap</span>: <span class="value">15px</span>;
+    }
+
+    <span class="selector">.demo-header h2</span> {
+        <span class="property">font-size</span>: <span class="value">2.5rem</span>;
+    }
+
+    <span class="selector">.demo-content</span> {
+        <span class="property">max-width</span>: <span class="value">1200px</span>;
+        <span class="property">margin</span>: <span class="value">0 auto</span>;
+    }
+}`;
+            }
+
+            deviceType.textContent = device;
+            breakpointInfo.textContent = breakpoint;
+            layoutInfo.textContent = layout;
+            navInfo.textContent = nav;
+            codeDisplay.innerHTML = code;
+
+            // Update active button
+            breakpointButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.width) === parseInt(width)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Slider event
+        widthSlider.addEventListener('input', (e) => {
+            updateLayout(e.target.value);
+        });
+
+        // Breakpoint buttons
+        breakpointButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const width = btn.dataset.width;
+                widthSlider.value = width;
+                updateLayout(width);
+            });
+        });
+
+        // Initial update
+        updateLayout(widthSlider.value);
+    </script>
+</body>
+</html>
